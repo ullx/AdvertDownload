@@ -1,7 +1,5 @@
 package test;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,18 +9,20 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+//import org.apache.poi.ss.usermodel.Row;
+//import org.apache.poi.xssf.usermodel.XSSFSheet;
+//import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
-public class PageFlow {
+public class PageElInformador extends AbstractAnunciosFlow{
 
-	public void seleccionarBienesRaices(WebDriver driver) {
+	String baseURL = "http://aviso.informador.com.mx/";
+	
+	private void selectBienesRaices() {
 		WebElement bienesRaices = driver.findElement(By.className("type-house"));
-		bienesRaices.click();
+		bienesRaices.click();  
 	}
 
-	public void opcionRenta(WebDriver driver) {
+	private void selectOpcionRenta() {
 
 		WebElement DropdownRenta = driver.findElement(By.id("drop_tran"));
 		WebElement div1 = DropdownRenta.findElement(By.className("dropdown"));
@@ -47,7 +47,7 @@ public class PageFlow {
 		}
 	}
 
-	public void opcionBodega(WebDriver driver) {
+	private void selectOpcionBodega() {
 
 		WebElement DropdownBodega = driver.findElement(By.id("drop_inmu"));
 		WebElement div3 = DropdownBodega.findElement(By.className("dropdown"));
@@ -71,20 +71,18 @@ public class PageFlow {
 		}
 	}
 
-	public void hacerConsulta(WebDriver driver) {
+	@Override
+	public void hacerConsulta() {
+		selectBienesRaices();
+		selectOpcionRenta();
+		selectOpcionBodega();
 
 		 WebElement zonaMetropolitana = driver.findElement(By.id("quick-search"));
 		 zonaMetropolitana.click();
-
-//		WebElement zapopan = driver.findElement(By.id("quick-searchZap"));
-//		zapopan.click();
-
-//		 WebElement tlaquepaque = driver.findElement(By.id("quick-searchTlaq"));
-//		 tlaquepaque.click();
-
 	}
 
-	public void extraerGuardarDatos(WebDriver driver) throws Exception {
+	@Override
+	public void extraerGuardarDatos() throws Exception {
 		WebElement siguiente = null;
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 
@@ -164,26 +162,32 @@ public class PageFlow {
 
 	private void exportToExcel(List<Anuncio> data) throws IOException {
 
-		FileInputStream fis = new FileInputStream(
-				"C:\\Users\\Usuario\\Documents\\Automation Projects\\eclipse-workspace\\WarehouseProject\\src\\testData\\TestData.xlsx");
-		FileOutputStream fos = null;
-		XSSFWorkbook workbook = new XSSFWorkbook(fis);
-		XSSFSheet sheet = workbook.getSheet("Data");
-		Row row = null;
-		// XSSFCell cell = null;
+//		FileInputStream fis = new FileInputStream(
+//				"C:\\Users\\Usuario\\Documents\\Automation Projects\\eclipse-workspace\\WarehouseProject\\src\\testData\\TestData.xlsx");
+//		FileOutputStream fos = null;
+//		XSSFWorkbook workbook = new XSSFWorkbook(fis);
+//		XSSFSheet sheet = workbook.getSheet("Data");
+//		Row row = null;
+//		// XSSFCell cell = null;
+//
+//		for (int i = 1; i < data.size(); i++) {
+//			Anuncio anuncio = data.get(i);
+//
+//			row = sheet.createRow(i);
+//			row.createCell(0).setCellValue(anuncio.getNombreAutor());
+//			row.createCell(1).setCellValue(anuncio.getTel());
+//			row.createCell(2).setCellValue(anuncio.getDescripcion());
+//		}
+//
+//		fos = new FileOutputStream(
+//				"C:\\Users\\Usuario\\Documents\\Automation Projects\\eclipse-workspace\\WarehouseProject\\src\\testData\\testData.xlsx");
+//		workbook.write(fos);
+//		fos.close();
+	}
 
-		for (int i = 1; i < data.size(); i++) {
-			Anuncio anuncio = data.get(i);
-
-			row = sheet.createRow(i);
-			row.createCell(0).setCellValue(anuncio.getNombreAutor());
-			row.createCell(1).setCellValue(anuncio.getTel());
-			row.createCell(2).setCellValue(anuncio.getDescripcion());
-		}
-
-		fos = new FileOutputStream(
-				"C:\\Users\\Usuario\\Documents\\Automation Projects\\eclipse-workspace\\WarehouseProject\\src\\testData\\testData.xlsx");
-		workbook.write(fos);
-		fos.close();
+	
+	@Override
+	String getURL() {
+		return baseURL;
 	}
 }

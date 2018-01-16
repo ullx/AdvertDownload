@@ -5,41 +5,51 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.*;
+//import org.openqa.selenium.*;
+//import org.openqa.selenium.chrome.ChromeDriver;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
 
 public class testClass extends TestCase {
+
 	private WebDriver driver;
-	String baseURL = "http://aviso.informador.com.mx/";
 
 	@Before
 	public void setUp() throws Exception {
-	  File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
-	  System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());		 
-      driver = new ChromeDriver();
-	  driver.get(baseURL);	
-	  driver.manage().window().maximize();
-      driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+//	  File file = new File("C:\\Users\\Patty\\eclipse-workspace\\chromedriver_win32\\chromedriver.exe");
+//	  System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());		 
+//      driver = new ChromeDriver();
+//	  driver.get(baseURL);	
+//	  driver.manage().window().maximize();
+//      driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 	}
 
 	@Test
 	public void testSimple() throws Exception {
-		
-		System.out.println("Starting test");
-		
-		PageFlow PF= new PageFlow();
-		PF.seleccionarBienesRaices(driver);
-		PF.opcionRenta(driver);
+//		AbstractAnunciosFlow flowInformador = new PageElInformador();
+//		driver = flowInformador.setupDriver();
+//		flowInformador.runFlow();
 		
 		
-		PF.opcionBodega(driver);
-		PF.hacerConsulta(driver);
+		AbstractAnunciosFlow flowViva = new PageVivanuncios();
+		driver = flowViva.setupDriver();
+		flowViva.runFlow();
 		
-		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-		PF.extraerGuardarDatos(driver);
+//		System.out.println("Starting test");
+//		
+//		PageElInformador informadorFlow= new PageElInformador();
+//		informadorFlow.seleccionarBienesRaices(driver);
+//		informadorFlow.opcionRenta(driver);
+//		
+//		
+//		informadorFlow.opcionBodega(driver);
+//		informadorFlow.hacerConsulta(driver);
+//		
+//		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
+//		informadorFlow.extraerGuardarDatos(driver);
+		
 	}
 
 	@After
