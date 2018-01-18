@@ -23,21 +23,14 @@ abstract class AbstractAnunciosFlow {
 	abstract String getURL();
 	
 	public void runFlow() throws Exception {
+		//Leer configuracions para saber el tipo de busqueda y estado busqueda
 		
-		hacerConsulta();
+		hacerConsulta(BusquedaTipo.BODEGAS, "mexico");
 		
 		//TODO: Regresar los datos de los anuncios para despues aqui mismo
 		//mandar llamar al metodo para guardar los datos que se le pasen?
 		extraerGuardarDatos();
 	}
-	
-	/**
-	 * In this method the intention is to put and do all the necessary 
-	 * input and actions to obtain the advertisements to get into to get the information
-	 * 
-	 * @param driver
-	 */
-	abstract void hacerConsulta();
 	
 	/**
 	 * This method is the one that should hold the loop to go throughout all and every
@@ -47,5 +40,7 @@ abstract class AbstractAnunciosFlow {
 	 * @throws Exception
 	 */
 	abstract void extraerGuardarDatos() throws Exception;
+
+	abstract void hacerConsulta(BusquedaTipo busqueda, String estado);
 	
 }

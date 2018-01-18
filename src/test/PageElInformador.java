@@ -13,6 +13,8 @@ import org.openqa.selenium.WebElement;
 //import org.apache.poi.xssf.usermodel.XSSFSheet;
 //import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 public class PageElInformador extends AbstractAnunciosFlow{
 
 	String baseURL = "http://aviso.informador.com.mx/";
@@ -72,13 +74,15 @@ public class PageElInformador extends AbstractAnunciosFlow{
 	}
 
 	@Override
-	public void hacerConsulta() {
-		selectBienesRaices();
-		selectOpcionRenta();
-		selectOpcionBodega();
-
-		 WebElement zonaMetropolitana = driver.findElement(By.id("quick-search"));
-		 zonaMetropolitana.click();
+	public void hacerConsulta(BusquedaTipo busqueda, String estado) {
+		throw new NotImplementedException();
+//		selectBienesRaices();
+//		selectOpcionRenta();
+//		if (busqueda == TIPO_BUSQUEDA.BODEGAS) {
+//			selectOpcionBodega();
+//		}
+//		 WebElement zonaMetropolitana = driver.findElement(By.id("quick-search"));
+//		 zonaMetropolitana.click();
 	}
 
 	@Override
