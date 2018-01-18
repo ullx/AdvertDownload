@@ -2,12 +2,10 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.NoSuchSessionException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
@@ -16,8 +14,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PageVivanuncios extends AbstractAnunciosFlow {
 
-	//This link with code is bodegas and jalisco
-//	String baseURL = "https://www.vivanuncios.com.mx/s-bodegas/jalisco/v1c33l1013p1";
 	String baseURL = "https://www.vivanuncios.com.mx";
 	String estado = null;
 	
@@ -40,35 +36,39 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			break;
 		case OFICINAS:subCategorias.findElement(By.cssSelector("a[href*='comerciales']")).click();
 			break;
-		case TERRENOS:subCategorias.findElement(By.cssSelector("a[href*='terrenos']")).click();
+		case TERRENOS: subCategorias.findElement(By.cssSelector("a[href*='terrenos']")).click();
 			break;
-		default: tipoBusqueda = BusquedaTipo.BODEGAS;
+		default: subCategorias.findElement(By.cssSelector("a[href*='bodegas']")).click();
 			break;
 		}
 		
-		//si no se selecciona localidad toma para todo mexico
-		if(estado.equals("mexico") == false) {
-			driver.findElement(By.className("location-link")).click();
-			driver.findElement(By.id("modal-location")).sendKeys(estado);
-			
-			WebElement estadosContainer = driver.findElement(By.className("pac-container"));
-			List<WebElement> estados = estadosContainer.findElements(By.className("pac-item"));
-			for(WebElement estadoSelect : estados) {
-				if(estadoSelect.getText().toUpperCase().contains(estado)) {
-					estadoSelect.click();
-					break;
-				}
-			}
-			
-			WebDriverWait wait = new WebDriverWait(driver, 2000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("change-loc")));
-			driver.findElement(By.className("change-loc")).click();
-		}
+		seleccionarEstado(estado);
 		
 		//cuando se selecciona la categoria ya hizo la busqueda
 //		driver.findElement(By.className("search-button-wrap")).findElement(By.tagName("button")).click();
 		
 		
+	}
+	
+	private void seleccionarEstado(String estado) {
+		// si no se selecciona localidad toma para todo mexico
+		if (estado.equals("mexico") == false) {
+			driver.findElement(By.className("location-link")).click();
+			driver.findElement(By.id("modal-location")).sendKeys(estado);
+
+			WebElement estadosContainer = driver.findElement(By.className("pac-container"));
+			List<WebElement> estados = estadosContainer.findElements(By.className("pac-item"));
+			for (WebElement estadoSelect : estados) {
+				if (estadoSelect.getText().toUpperCase().contains(estado)) {
+					estadoSelect.click();
+					break;
+				}
+			}
+
+			WebDriverWait wait = new WebDriverWait(driver, 2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("change-loc")));
+			driver.findElement(By.className("change-loc")).click();
+		}
 	}
 
 	@Override
@@ -170,7 +170,6 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		
 		return anuncios;
 	}
-	
 	
 	private boolean morePagesExists() {
 		try {

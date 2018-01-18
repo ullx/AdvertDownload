@@ -33,9 +33,14 @@ public class testClass extends TestCase {
 //		flowInformador.runFlow();
 		
 		
-		AbstractAnunciosFlow flowViva = new PageVivanuncios();
-		driver = flowViva.setupDriver();
-		flowViva.runFlow();
+//		AbstractAnunciosFlow flowViva = new PageVivanuncios();
+//		driver = flowViva.setupDriver();
+//		flowViva.runFlow();
+		
+
+		AbstractAnunciosFlow flowLamudi = new PageLamudi();
+		driver = flowLamudi.setupDriver();
+		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
 		
 //		System.out.println("Starting test");
 //		
