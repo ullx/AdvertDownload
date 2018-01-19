@@ -9,8 +9,11 @@ import org.openqa.selenium.chrome.*;
 //import org.openqa.selenium.*;
 //import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.Hashtable;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.io.File;
+import java.io.FileInputStream;
 
 public class testClass extends TestCase {
 
@@ -28,6 +31,21 @@ public class testClass extends TestCase {
 
 	@Test
 	public void testSimple() throws Exception {
+		//Cargar configuracion
+		//Definir que se quiere hacer Venta o Renta
+		//Sacar el Inmueble
+		
+		Properties pro = loadProperties();
+		
+		
+		
+//		Inmuebles24 I24 = new Inmuebles24(pro);
+		
+		PageInmuebles24 inmuebles24 = new PageInmuebles24(pro);
+		driver = inmuebles24.setupDriver();
+		inmuebles24.runFlow(null, null);
+		
+		
 //		AbstractAnunciosFlow flowInformador = new PageElInformador();
 //		driver = flowInformador.setupDriver();
 //		flowInformador.runFlow();
@@ -37,10 +55,10 @@ public class testClass extends TestCase {
 //		driver = flowViva.setupDriver();
 //		flowViva.runFlow();
 		
-
-		AbstractAnunciosFlow flowLamudi = new PageLamudi();
-		driver = flowLamudi.setupDriver();
-		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
+//
+//		AbstractAnunciosFlow flowLamudi = new PageLamudi();
+//		driver = flowLamudi.setupDriver();
+//		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
 		
 //		System.out.println("Starting test");
 //		
@@ -56,6 +74,38 @@ public class testClass extends TestCase {
 //		informadorFlow.extraerGuardarDatos(driver);
 		
 	}
+	
+	
+	public Properties loadProperties() {
+		Hashtable<String, String> HT = new Hashtable<String, String>();
+
+		Properties pro = null;
+		
+		try {
+			File source = new File(
+					"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\src\\testData\\inmuebles24.properties");
+
+			FileInputStream input = new FileInputStream(source);
+			
+			pro = new Properties();
+			pro.load(input);
+
+			System.out.println("Parametros de búsqueda: ");
+			System.out.println("Transacción: ---" + pro.getProperty("transaccion"));
+			System.out.println("Inmuebles  : ---" + pro.getProperty("inmueble"));
+			System.out.println("Ubicación  : ---" + pro.getProperty("ubicacion"));
+			System.out.println("Precio Min : ---" + pro.getProperty("precioMin"));
+			System.out.println("Precio Max : ---" + pro.getProperty("precioMax"));
+
+		} catch (Exception exp) {
+
+			System.out.println("Exception is: ---" + exp.getMessage());
+		}
+		
+		return pro;
+	}
+
+
 
 	@After
 	public void tearDown() throws Exception {
