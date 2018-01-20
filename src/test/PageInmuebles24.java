@@ -1,70 +1,36 @@
 package test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 
 public class PageInmuebles24 extends AbstractAnunciosFlow {
 
-	
-	
 	String baseURL = "http://www.inmuebles24.com/";
 	String estado = null;
-	Properties pro  = null;
-	
+	Properties pro = null;
+
+	@Override
 	String getURL() {
 		return baseURL;
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
+
 	public PageInmuebles24(Properties config) {
-		this.pro  = config;
-	}
-	
-	void hacerConsulta(BusquedaTipo busquedaTipo, String estado) {
-		
-		//Seleccionar renta o venta
-		//poner inmueble
-		
-		//poner ubicacion
-		
-		//click de busqueda
-		
-		//poner rango de precios
-		//click en submit
-		
-		seleccionarTransacciones(driver);
-		seleccionarPropiedades(driver);
-		seleccionarUbicaciones(driver);
-		
+		this.pro = config;
 	}
 
+	///////////////////////////////////////////////////////////////////////////////////////
 
-
-	void extraerGuardarDatos() {
+	private List<Anuncio> consulta() {
 		
-		//aqui se hace el for o el while que recorre
-		//todos los resultados y extrae los datos
-		
-		
-
-		try {
-			extraerDatos(driver);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-	}
-
-	
-	
-	
-	
-	public void seleccionarTransacciones(WebDriver driver) {
+		List<Anuncio> anuncios = new ArrayList<Anuncio>();
+		Anuncio a = new Anuncio();
 		WebElement transacciones = driver.findElement(By.id("vertical-operation-menu"));
 		try {
 
@@ -72,8 +38,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : transaccionesTipo) {
 				String transaccionTipo = pro.getProperty("transaccion");
 				if (opciones.getText().equalsIgnoreCase(transaccionTipo)) {
-					String a = opciones.getText();
-					System.out.println("Transacción Seleccionada: " + a);
+					a.setTransaccion(opciones.getText());
+					System.out.println("Transacción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 			}
@@ -84,9 +50,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			e.printStackTrace();
 		}
 
-	}
+		///////////
 
-	public void seleccionarPropiedades(WebDriver driver) {
 		WebElement tipoPropiedad = driver.findElement(By.id("searchbox-home_tipodepropiedad"));
 		tipoPropiedad.click();
 
@@ -96,8 +61,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : seleccionarPropiedad) {
 				String propiedadTipo = pro.getProperty("inmueble");
 				if (opciones.getText().equalsIgnoreCase(propiedadTipo)) {
-					String b = opciones.getText();
-					System.out.println("Tipo de inmueble Seleccionado: " + b);
+					a.setInmueble(opciones.getText());
+					System.out.println("Tipo de inmueble Seleccionado: " + a.getInmueble());
 					opciones.click();
 				}
 			}
@@ -107,18 +72,39 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
 
-	public void seleccionarUbicaciones(WebDriver driver) {
+		///////////
+
 		WebElement ubicacion = driver.findElement(By.id("searchbox-home_ubicacion"));
 		ubicacion.sendKeys(pro.getProperty("ubicacion"));
 		WebElement buscar = driver.findElement(By.id("submitBtn"));
 		buscar.click();
 
+		return anuncios;
 	}
 
-	public void extraerDatos(WebDriver driver) throws Exception {
+	///////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	void hacerConsulta(BusquedaTipo busquedaTipo, String estado) {
+		List<Anuncio> anuncios = null;
+		anuncios = consulta();
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////
+	@Override
+	void extraerGuardarDatos() {
+
+		List<Anuncio> anuncios = null;
+		anuncios = extraerDatos();
+	}
+
+	///////////////////////////////////////////////////////////////////////////////////////
+
+	private List<Anuncio> extraerDatos() {
+
+		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		WebElement siguiente = null;
+		Anuncio a = new Anuncio();
 
 		for (;;) {
 
@@ -145,15 +131,15 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				try {
 
 					WebElement descripccionPropiedad = driver.findElement(By.className("description-body"));
-					String descripcion = descripccionPropiedad.getText();
+					a.setDescripcion(descripccionPropiedad.getText());
 
 					WebElement datoPropiedad = driver.findElement(By.className("btn-phone-text"));
 					datoPropiedad.click();
 
 					WebElement datoTelefono = driver.findElement(By.className("lead-phone"));
-					String telefono = datoTelefono.getText();
+					a.setTelefono(datoTelefono.getText());
 
-					System.out.println("Descripcción: " + idx + " " + telefono + " " + descripcion);
+					System.out.println("Descripcción: " + idx + " " + a.getTelefono() + " " + a.getDescripcion());
 
 					WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
 					cerrarVentana.click();
@@ -188,6 +174,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			System.out.println("Terminando proceso");
 		}
 		System.out.println("Finished ");
+		return anuncios;
 	}
-	
+
 }

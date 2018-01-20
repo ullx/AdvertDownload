@@ -36,19 +36,16 @@ public class testClass extends TestCase {
 		//Sacar el Inmueble
 		
 		Properties pro = loadProperties();
+
+		
+//		PageInmuebles24 inmuebles24 = new PageInmuebles24(pro);
+//		driver = inmuebles24.setupDriver();
+//		inmuebles24.runFlow(null, null);
 		
 		
-		
-//		Inmuebles24 I24 = new Inmuebles24(pro);
-		
-		PageInmuebles24 inmuebles24 = new PageInmuebles24(pro);
-		driver = inmuebles24.setupDriver();
-		inmuebles24.runFlow(null, null);
-		
-		
-//		AbstractAnunciosFlow flowInformador = new PageElInformador();
-//		driver = flowInformador.setupDriver();
-//		flowInformador.runFlow();
+		PageInformador flowInformador = new PageInformador(pro);
+		driver = flowInformador.setupDriver();
+		flowInformador.runFlow(null, null);
 		
 		
 //		AbstractAnunciosFlow flowViva = new PageVivanuncios();
@@ -83,7 +80,7 @@ public class testClass extends TestCase {
 		
 		try {
 			File source = new File(
-					"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\src\\testData\\inmuebles24.properties");
+					"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\src\\testData\\inmuebles.properties");
 
 			FileInputStream input = new FileInputStream(source);
 			
