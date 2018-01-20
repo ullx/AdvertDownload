@@ -9,8 +9,15 @@ import org.openqa.selenium.chrome.*;
 //import org.openqa.selenium.*;
 //import org.openqa.selenium.chrome.ChromeDriver;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 
 public class testClass extends TestCase {
 
@@ -37,10 +44,15 @@ public class testClass extends TestCase {
 //		driver = flowViva.setupDriver();
 //		flowViva.runFlow();
 		
+		List<Anuncio> anuncios = new ArrayList<Anuncio>();
+		Anuncio a = new Anuncio("autor", "descripcion", "telefono");
+		anuncios.add(a);
 
-		AbstractAnunciosFlow flowLamudi = new PageLamudi();
-		driver = flowLamudi.setupDriver();
-		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
+		exportToCSV(anuncios);
+		
+//		AbstractAnunciosFlow flowLamudi = new PageLamudi();
+//		driver = flowLamudi.setupDriver();
+//		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
 		
 //		System.out.println("Starting test");
 //		
@@ -55,6 +67,21 @@ public class testClass extends TestCase {
 //		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
 //		informadorFlow.extraerGuardarDatos(driver);
 		
+	}
+	
+	public void exportToCSV(List<Anuncio> anuncios) {
+		
+		File outputFilePath = new File("testFile.csv");
+		
+		for(Anuncio a : anuncios ) {
+			try(Writer writer = new BufferedWriter(new OutputStreamWriter(
+					new FileOutputStream(outputFilePath), "utf-8"))){
+				writer.write(a.getDescripcion());
+			}catch(IOException e) {
+				e.printStackTrace();
+			}
+		}
+		System.out.println("Archivo output " + outputFilePath.getAbsolutePath());
 	}
 
 	@After
