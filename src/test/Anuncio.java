@@ -2,41 +2,52 @@ package test;
 
 public class Anuncio {
  
-	String nombreAutor = "";
+	String transaccion = "";
+	String inmueble = "";
 	String descripcion = "";
-	String tel = "";
+	String telefono = "";
 	
 	public Anuncio() {
 		
 	}
 	
-	public Anuncio(String nombreAutor, String descripcion, String tel) {
-		this.nombreAutor = nombreAutor;
+	
+	public Anuncio(String transaccion, String inmueble, String descripcion, String telefono) {
+		this.transaccion = transaccion;
+		this.inmueble = inmueble;
 		this.descripcion = descripcion;
-		this.tel = tel;
+		this.telefono = telefono;
 	}
 	
-	public String getNombreAutor() {
-		return nombreAutor;
+	public String getTransaccion() {
+		return transaccion;
 	}
 	
-	public String getDescripcion() {
+	public String getInmueble() {
+		return inmueble;
+	}
+	
+	public String getDescripcion () {
 		return descripcion;
 	}
 	
-	public String getTel () {
-		return tel;
+	public String getTelefono () {
+		return telefono;
 	}
 	
+	public void setTransaccion(String transaccion) {
+		this.transaccion = transaccion;
+	}
+	
+	public void setInmueble(String inmueble) {
+		this.inmueble = inmueble;
+	}
 	public void setDescripcion(String descripcion) {
 		this.descripcion = descripcion;
 	}
 	
-	public void setNombreAutor(String nombreAutor) {
-		this.nombreAutor = nombreAutor;
-	}
-	public void setTel(String tel) {
-		this.tel = tel;
+	public void setTelefono(String telefono) {
+		this.telefono = telefono;
 	}
 	
 }

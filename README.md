@@ -1,2 +1,2 @@
 # AdvertDownload
-Advertices download bot
+Obtiene informacion de anuncios

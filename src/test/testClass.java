@@ -11,9 +11,12 @@ import org.openqa.selenium.chrome.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Hashtable;
+import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
@@ -35,9 +38,21 @@ public class testClass extends TestCase {
 
 	@Test
 	public void testSimple() throws Exception {
-//		AbstractAnunciosFlow flowInformador = new PageElInformador();
+		//Cargar configuracion
+		//Definir que se quiere hacer Venta o Renta
+		//Sacar el Inmueble
+		
+		Properties pro = loadProperties();
+
+		
+//		PageInmuebles24 inmuebles24 = new PageInmuebles24(pro);
+//		driver = inmuebles24.setupDriver();
+//		inmuebles24.runFlow(null, null);
+		
+//		
+//		PageInformador flowInformador = new PageInformador(pro);
 //		driver = flowInformador.setupDriver();
-//		flowInformador.runFlow();
+//		flowInformador.runFlow(null, null);
 		
 		
 //		AbstractAnunciosFlow flowViva = new PageVivanuncios();
@@ -45,7 +60,7 @@ public class testClass extends TestCase {
 //		flowViva.runFlow();
 		
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
-		Anuncio a = new Anuncio("autor", "descripcion", "telefono");
+		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono");
 		anuncios.add(a);
 
 		exportToCSV(anuncios);
@@ -83,6 +98,37 @@ public class testClass extends TestCase {
 		}
 		System.out.println("Archivo output " + outputFilePath.getAbsolutePath());
 	}
+
+
+public Properties loadProperties() {
+		Hashtable<String, String> HT = new Hashtable<String, String>();
+
+		Properties pro = null;
+		
+		try {
+			File source = new File(
+					"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\src\\testData\\inmuebles.properties");
+
+			FileInputStream input = new FileInputStream(source);
+			
+			pro = new Properties();
+			pro.load(input);
+
+			System.out.println("Parametros de búsqueda: ");
+			System.out.println("Transacción: ---" + pro.getProperty("transaccion"));
+			System.out.println("Inmuebles  : ---" + pro.getProperty("inmueble"));
+			System.out.println("Ubicación  : ---" + pro.getProperty("ubicacion"));
+			System.out.println("Precio Min : ---" + pro.getProperty("precioMin"));
+			System.out.println("Precio Max : ---" + pro.getProperty("precioMax"));
+
+		} catch (Exception exp) {
+
+			System.out.println("Exception is: ---" + exp.getMessage());
+		}
+		
+		return pro;
+	}
+
 
 	@After
 	public void tearDown() throws Exception {

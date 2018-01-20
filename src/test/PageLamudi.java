@@ -136,8 +136,6 @@ public class PageLamudi extends AbstractAnunciosFlow {
 		//show more link
 		driver.findElement(By.className("ViewMore-trigger-text")).click();;
 		a.setDescripcion(driver.findElement(By.className("Description")).getText());
-		
-		
 		//Reveal phone number
 		driver.findElement(By.partialLinkText("Mostrar el tel")).click();
 		driver.findElement(By.id("request_phone_phone_input")).sendKeys("33 33 33 33 33");
@@ -148,7 +146,7 @@ public class PageLamudi extends AbstractAnunciosFlow {
 		
 		WebDriverWait wait = new WebDriverWait(driver, 5000);
 		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("AgentBoxSuccess-agent-phone")));
-		a.setTel(telefono.getText());
+		a.setTelefono(telefono.getText());
 		
 		driver.findElement(By.className("js-viewerContainerRequestPhoneCloseBtn\"")).click();
 		

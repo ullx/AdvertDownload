@@ -12,7 +12,7 @@ abstract class AbstractAnunciosFlow {
 	protected WebDriver driver;
 	
 	public WebDriver setupDriver() {
-		File file = new File("C:\\Users\\Patty\\eclipse-workspace\\chromedriver_win32\\chromedriver.exe");
+		File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 		
 		//DesiredCapabilities.chrome()
@@ -33,6 +33,7 @@ abstract class AbstractAnunciosFlow {
 		
 		//TODO: Regresar los datos de los anuncios para despues aqui mismo
 		//mandar llamar al metodo para guardar los datos que se le pasen?
+		
 		extraerGuardarDatos();
 	}
 	
@@ -46,5 +47,7 @@ abstract class AbstractAnunciosFlow {
 	abstract void extraerGuardarDatos() throws Exception;
 
 	abstract void hacerConsulta(BusquedaTipo busqueda, String estado);
+	
+
 	
 }

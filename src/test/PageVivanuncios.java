@@ -203,7 +203,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		WebElement desc = driver.findElement(By.className("ad-description"));
 		driver.findElement(By.className("show-phone")).click();
 		
-		a.setTel(driver.findElement(By.className("real-phone")).findElement(By.tagName("a")).getText());
+		a.setTelefono(driver.findElement(By.className("real-phone")).findElement(By.tagName("a")).getText());
 		a.setDescripcion(desc.getText());
 		
 		return a;
