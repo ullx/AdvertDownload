@@ -2,6 +2,7 @@ package test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -15,7 +16,12 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PageLamudi extends AbstractAnunciosFlow {
 
-	String baseUrl = "https://www.lamudi.com.mx/";
+	public PageLamudi(Properties config) {
+		super(config);
+	}
+
+//	String baseUrl = "https://www.lamudi.com.mx/";
+	String baseUrl = "https://www.lamudi.com.mx/for-sale/q:bodega/";
 	String estado = null;
 	
 	@Override
@@ -23,30 +29,37 @@ public class PageLamudi extends AbstractAnunciosFlow {
 		return baseUrl;
 	}
 
+	@SuppressWarnings("unused")
 	@Override
-	void hacerConsulta(BusquedaTipo busquedaTipo, String estado) {
-		this.estado = estado;
-		
-		//Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.132 Safari/537.36
-		
-		
-		driver.findElement(By.xpath("//*[@id=\"search-widget-tabs\"]/div[2]")).click();
-		
-		switch(busquedaTipo) {
-		case BODEGAS: driver.findElement(By.id("searchbar")).sendKeys("bodega");
-			break;
-		case CASAS: driver.findElement(By.id("searchbar")).sendKeys(""); 
-			break;
-		case OFICINAS: driver.findElement(By.id("searchbar")).sendKeys("");
-			break;
-		case TERRENOS: driver.findElement(By.id("searchbar")).sendKeys("");
-			break;
-		default: driver.findElement(By.id("searchbar")).sendKeys("bodega");
-			break;
+	void hacerConsulta() {
+		if(true) {
+			return;	
 		}
 		
-		// para bodegas se mete texto en el buscador
-		if (busquedaTipo != BusquedaTipo.BODEGAS) {
+		
+		try {
+		
+		estado = config.getProperty("ubicacion");
+		String transaccion = config.getProperty("transaccion").toLowerCase();
+		
+		WebElement searchTabs = driver.findElement(By.id("search-widget-tabs"));
+		
+		if(transaccion.contains("compra")  || transaccion.contains("venta")) {
+			driver.findElement(By.xpath("//*[@id=\"search-widget-tabs\"]/div[1]/label")).click();
+		}else if(transaccion.contains("renta")) {
+			driver.findElement(By.xpath("//*[@id=\"search-widget-tabs\"]/div[2]/label/span")).click();
+		}
+		////*[@id="search-widget-tabs"]/div[1]/label/span
+		
+		
+		if(inmuebleTipo == BusquedaTipo.BODEGA) {
+			driver.findElement(By.id("searchbar")).sendKeys("bodega");
+		}
+		
+		
+		//Se selecciona el inmueble a buscar
+		//Si es bodega se salta este if porque se mete texto en el buscador
+		if (inmuebleTipo != BusquedaTipo.BODEGA) {
 			driver.findElement(By.id("lnkSelectKit-display")).click();
 			WebElement dropDownCategories = driver.findElement(By.className("selectkit-choices"));
 			List<WebElement> options = dropDownCategories.findElements(By.className("selectkit-choice"));
@@ -54,28 +67,31 @@ public class PageLamudi extends AbstractAnunciosFlow {
 			
 			for (WebElement opt : options) {
 				System.out.println(opt.getText());
-				if (opt.getText().contains(busquedaTipo.toString().toLowerCase())) {
+				if (opt.getText().contains(inmuebleTipo.toString().toLowerCase())) {
 					opt.click();
 				}
 			}
+		}else {
+			
 		}
+		
+		Thread.sleep(2000);
 
-		WebElement button = driver.findElement(By.id("btnSubmitSearch"));    //.click();
-		System.out.println(button.getText());
+		//CLick on search
+//		driver.findElement(By.id("btnSubmitSearch")).click();
+		driver.findElement(By.xpath("//*[@id=\"btnSubmitSearch\"]/span")).click();
 		 
-		 
-		 
-		 try {
-			Thread.sleep(10000);
 		} catch (Exception e) {
+
 		}
 		 
-		 
+		 //TESTING
+		 //TESTING
 		 throw new RuntimeException();
 	}
 	
 	@Override
-	void extraerGuardarDatos() throws Exception {
+	List<Anuncio> extraerGuardarDatos() throws Exception {
 		
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		int countPagina = 1;
@@ -115,6 +131,8 @@ public class PageLamudi extends AbstractAnunciosFlow {
 			countPagina++;
 		}while (morePagesExists());
 		
+		
+		return anuncios;
 	}
 	
 	private boolean morePagesExists() {
