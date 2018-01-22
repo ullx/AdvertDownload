@@ -6,16 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Properties;
-import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
 
 public class testClass extends TestCase {
 
