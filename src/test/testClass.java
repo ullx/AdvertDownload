@@ -49,7 +49,7 @@ public class testClass extends TestCase {
 //		driver = inmuebles24.setupDriver();
 //		inmuebles24.runFlow(null, null);
 		
-//		
+	
 //		PageInformador flowInformador = new PageInformador(pro);
 //		driver = flowInformador.setupDriver();
 //		flowInformador.runFlow(null, null);
@@ -57,7 +57,7 @@ public class testClass extends TestCase {
 		
 //		AbstractAnunciosFlow flowViva = new PageVivanuncios();
 //		driver = flowViva.setupDriver();
-//		flowViva.runFlow();
+//		flowViva.runFlow(null, null);
 		
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono");
@@ -69,19 +69,6 @@ public class testClass extends TestCase {
 //		driver = flowLamudi.setupDriver();
 //		flowLamudi.runFlow(BusquedaTipo.BODEGAS, "mexico");
 		
-//		System.out.println("Starting test");
-//		
-//		PageElInformador informadorFlow= new PageElInformador();
-//		informadorFlow.seleccionarBienesRaices(driver);
-//		informadorFlow.opcionRenta(driver);
-//		
-//		
-//		informadorFlow.opcionBodega(driver);
-//		informadorFlow.hacerConsulta(driver);
-//		
-//		driver.manage().timeouts().implicitlyWait(1, TimeUnit.SECONDS);
-//		informadorFlow.extraerGuardarDatos(driver);
-		
 	}
 	
 	public void exportToCSV(List<Anuncio> anuncios) {
@@ -91,7 +78,8 @@ public class testClass extends TestCase {
 		for(Anuncio a : anuncios ) {
 			try(Writer writer = new BufferedWriter(new OutputStreamWriter(
 					new FileOutputStream(outputFilePath), "utf-8"))){
-				writer.write(a.getDescripcion());
+				writer.write(a.getDescripcion() + a.getTelefono());
+				
 			}catch(IOException e) {
 				e.printStackTrace();
 			}
@@ -107,7 +95,7 @@ public Properties loadProperties() {
 		
 		try {
 			File source = new File(
-					"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\src\\testData\\inmuebles.properties");
+			"C:\\Users\\Usuario\\Documents\\Automation Projects\\git\\AdvertDownload\\config.properties");
 
 			FileInputStream input = new FileInputStream(source);
 			
