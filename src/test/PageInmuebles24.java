@@ -139,6 +139,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		List<Anuncio> anuncios = null;
 		anuncios = extraerDatos();
+		System.out.println("Numero de anuncios en total descargados " + anuncios.size());
 		return anuncios;
 	}
 
@@ -146,8 +147,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 	private List<Anuncio> extraerDatos() {
 
-		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		WebElement siguiente = null;
+		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 
 		for (;;) {
 
@@ -176,6 +177,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
 
 				System.out.println("Télefono: " + idx + " " + data.getTelefono());
+				
+				anuncios.add(data);
 
 				try {
 					WebElement regresar = driver.findElement(By.className("ticon-arrow-left"));

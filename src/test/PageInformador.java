@@ -58,10 +58,8 @@ public class PageInformador extends AbstractAnunciosFlow {
 					Thread.sleep(1000);
 					opciones.click();
 				}
-				
 
-				else if (transaccionTipo.equalsIgnoreCase("renta")
-						&& opciones.getText().equalsIgnoreCase("Renta")) {
+				else if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Renta")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
@@ -132,35 +130,33 @@ public class PageInformador extends AbstractAnunciosFlow {
 		///////////////////////////
 
 		try {
+
 			String ubicacionBusqueda = config.getProperty("ubicacion");
-			Thread.sleep(1000);
-			
+
 			if (ubicacionBusqueda.equalsIgnoreCase("zona metropolitana")) {
 				WebElement zonaMetro = driver.findElement(By.id("quick-search"));
-				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-				Thread.sleep(1000);
+				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				zonaMetro.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("zapopan")) {
 				WebElement zapopan = driver.findElement(By.id("quick-searchZap"));
-				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
+				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				zapopan.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("guadalajara")) {
 
 				WebElement gdl = driver.findElement(By.id("quick-searchGdl"));
-				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-				Thread.sleep(1000);
+				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				gdl.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("tlaquepaque")) {
 
 				WebElement tlaque = driver.findElement(By.id("quick-searchTlaq"));
-				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-				Thread.sleep(1000);
+				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
+
 				tlaque.click();
 			}
 		}
@@ -243,7 +239,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 		WebElement desc = driver.findElement(By.className("detail-description"));
 		a.setDescripcion(desc.getText());
-		
+
 		try {
 
 			WebElement precioInmueble = driver.findElement(By.className("detail-view"));
