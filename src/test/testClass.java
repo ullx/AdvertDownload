@@ -40,9 +40,8 @@ public class testClass extends TestCase {
 		runFlow.runFlow();
 		
 //		List<Anuncio> anuncios = new ArrayList<Anuncio>();
-//		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono");
+//		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono" , "precio");
 //		anuncios.add(a);
-//
 //		exportToCSV(anuncios);
 	}
 
