@@ -36,24 +36,6 @@ public class testClass extends TestCase {
 		driver = runFlow.setupDriver();
 		runFlow.runFlow();
 
-//		AbstractAnunciosFlow runFlow = new PageVivanuncios(config);
-//		driver = runFlow.setupDriver();
-//		runFlow.runFlow();
-		
-//		AbstractAnunciosFlow runFlow = new PageInmuebles24(config);
-//		driver = runFlow.setupDriver();
-//		runFlow.runFlow();
-		
-//		AbstractAnunciosFlow runFlow = new PageInformador(config);
-//		driver = runFlow.setupDriver();
-//		runFlow.runFlow();
-		
-//		List<Anuncio> anuncios = new ArrayList<Anuncio>();
-//		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono" , "precio");
-//		anuncios.add(a);
-//		exportToCSV(anuncios);
-		
-		
 		driver.quit();
 	}
 

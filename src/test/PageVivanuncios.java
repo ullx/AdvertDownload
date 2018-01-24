@@ -203,7 +203,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			
 			System.out.println("Pagina: " + countPagina + " Número de resultados" + results);
 			
-			for (int idx = 10; idx < results; idx++) {
+			for (int idx = 0; idx < results; idx++) {
 
 				WebElement elementToClick = anunciosTitles.get(idx);
 						
@@ -243,7 +243,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			int results = anunciosTitles.size();
 			System.out.println("Número de resultados: " + results);
 			
-			for (int idx = results - 1; idx < results; idx++) {
+			for (int idx = 0; idx < results; idx++) {
 
 //				System.out.println(anunciosTitles.get(idx).getText());
 				WebElement el = anunciosTitles.get(idx).findElement(By.tagName("a"));
