@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
+import java.util.List;
 import java.util.Properties;
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,14 +27,22 @@ public class testClass extends TestCase {
 		Properties config = loadProperties();
 		
 
-		AbstractAnunciosFlow runFlow = new PageVivanuncios(config);
+//		AbstractAnunciosFlow runFlow = new PageVivanuncios(config);
+//		driver = runFlow.setupDriver();
+//		runFlow.runFlow();
+		
+//		AbstractAnunciosFlow runFlow = new PageInmuebles24(config);
+//		driver = runFlow.setupDriver();
+//		runFlow.runFlow();
+		
+		AbstractAnunciosFlow runFlow = new PageInformador(config);
 		driver = runFlow.setupDriver();
 		runFlow.runFlow();
 		
 //		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 //		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono");
 //		anuncios.add(a);
-
+//
 //		exportToCSV(anuncios);
 	}
 

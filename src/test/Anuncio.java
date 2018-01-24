@@ -6,13 +6,14 @@ public class Anuncio {
 	String inmueble = "";
 	String descripcion = "";
 	String telefono = "";
+	String precio = "";
 	
 	public Anuncio() {
 		
 	}
 	
 	
-	public Anuncio(String transaccion, String inmueble, String descripcion, String telefono) {
+	public Anuncio(String transaccion, String inmueble, String descripcion, String telefono, String precio) {
 		this.transaccion = transaccion;
 		this.inmueble = inmueble;
 		this.descripcion = descripcion;
@@ -35,6 +36,10 @@ public class Anuncio {
 		return telefono;
 	}
 	
+	public String getPrecio () {
+		return precio;
+	}
+	
 	public void setTransaccion(String transaccion) {
 		this.transaccion = transaccion;
 	}
@@ -48,6 +53,10 @@ public class Anuncio {
 	
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
+	}
+	
+	public void setPrecio(String precio) {
+		this.precio = precio;
 	}
 	
 }

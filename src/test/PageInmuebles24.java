@@ -28,9 +28,9 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 	///////////////////////////////////////////////////////////////////////////////////////
 
-	private List<Anuncio> consulta() {
+	@Override
+	void hacerConsulta() {
 
-		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		Anuncio a = new Anuncio();
 		WebElement transacciones = driver.findElement(By.id("vertical-operation-menu"));
 		try {
@@ -41,13 +41,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : transaccionesTipo) {
 				if (transaccionTipo.equalsIgnoreCase("venta") && opciones.getText().equalsIgnoreCase("Comprar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Rentar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
@@ -68,29 +68,29 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			String propiedadTipo = config.getProperty("inmueble");
 			for (WebElement opciones : seleccionarPropiedad) {
-				if (propiedadTipo.equalsIgnoreCase("bodegas") && opciones.getText().equalsIgnoreCase("Bodegas")) {
+				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("casas") && opciones.getText().equalsIgnoreCase("Casa")) {
+				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("terrenos")
+				else if (propiedadTipo.toLowerCase().contains("terreno")
 						&& opciones.getText().equalsIgnoreCase("Terreno / Lote")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("oficinas") && opciones.getText().equalsIgnoreCase("Oficina")) {
+				else if (propiedadTipo.toLowerCase().contains("oficina") && opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
+					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -131,14 +131,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			e.printStackTrace();
 		}
 
-		return anuncios;
 	}
-
-	@Override
-	void hacerConsulta() {
-		List<Anuncio> anuncios = null;
-		anuncios = consulta();
-	}
+	///////////////////////////////////////////////////////////////////////////////////////
 
 	@Override
 	List<Anuncio> extraerGuardarDatos() {
@@ -154,7 +148,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 		WebElement siguiente = null;
-		Anuncio a = new Anuncio();
 
 		for (;;) {
 
@@ -166,30 +159,29 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
 				precioBoton.click();
 			} catch (NoSuchElementException e) {
-				System.out.println("No se ingresÃ³ rango de precios");
+				System.out.println("No se ingresó rango de precios");
 			}
 
 			WebElement seleccionarAnuncios = driver.findElement(By.className("list-posts"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("post"));
 			int results = listaResultados.size();
-			System.out.println("NÃºmero de resultados: " + results);
+			System.out.println("Número de resultados: " + results);
 
 			for (int idx = 0; idx < results; idx++) {
 
 				listaResultados.get(idx).click();
 
+				Anuncio data = getDataFromLink(driver);
 
-					Anuncio data = getDataFromLink(driver);
+				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
 
-					System.out.println("DescripciÃ³n: " + idx + " " + data.getDescripcion());
-
-					System.out.println("TÃ©lefono: " + idx + " " + data.getTelefono());
+				System.out.println("Télefono: " + idx + " " + data.getTelefono());
 
 				try {
 					WebElement regresar = driver.findElement(By.className("ticon-arrow-left"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
-					System.out.println("No se encontro link para regresar");
+					System.out.println("No se encontró link para regresar");
 					break;
 				}
 
@@ -204,7 +196,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				}
 
 			} catch (WebDriverException e) {
-				System.out.println("Se llego al final de las paginas");
+				System.out.println("Se llegó al final de las paginas");
 				break;
 			}
 
@@ -224,15 +216,15 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			WebElement botonTel = driver.findElement(By.className("btn-phone-text"));
 			botonTel.click();
-			
+
 			WebElement datoTelefono = driver.findElement(By.className("lead-phone"));
 			a.setTelefono(datoTelefono.getText());
-			
+
 			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
 			cerrarVentana.click();
 
 		} catch (NoSuchElementException e) {
-			System.out.println("No se encontro tÃ©lefono o descripciÃ³n");
+			System.out.println("No se encontro télefono o descripción");
 		}
 
 		return a;

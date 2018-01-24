@@ -16,17 +16,22 @@ public class PageInformador extends AbstractAnunciosFlow {
 	String estado = null;
 	Properties pro = null;
 
+	@Override
 	String getURL() {
 		return baseURL;
 	}
 
+	///////////////////////////////////////////////////////////////////////////////
+
 	public PageInformador(Properties config) {
 		super(config);
 	}
-	
-	private List<Anuncio> consulta() {
 
-		List<Anuncio> anuncios = new ArrayList<Anuncio>();
+	///////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	void hacerConsulta() {
+
 		Anuncio a = new Anuncio();
 
 		WebElement bienesRaices = driver.findElement(By.className("type-house"));
@@ -41,10 +46,11 @@ public class PageInformador extends AbstractAnunciosFlow {
 			WebElement div2 = div1.findElement(By.tagName("div"));
 			List<WebElement> transaccionesTipo = div2.findElements(By.tagName("li"));
 
-			String transaccionTipo = pro.getProperty("transaccion");
+			String transaccionTipo = config.getProperty("transaccion");
 
 			for (WebElement opciones : transaccionesTipo) {
 
+				Thread.sleep(1000);
 				if (transaccionTipo.equalsIgnoreCase("venta")
 						&& opciones.getText().equalsIgnoreCase("Venta / Traspaso")) {
 					a.setTransaccion(opciones.getText());
@@ -52,8 +58,10 @@ public class PageInformador extends AbstractAnunciosFlow {
 					Thread.sleep(1000);
 					opciones.click();
 				}
+				
 
-				else if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Renta")) {
+				else if (transaccionTipo.equalsIgnoreCase("renta")
+						&& opciones.getText().equalsIgnoreCase("Renta")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
@@ -72,22 +80,25 @@ public class PageInformador extends AbstractAnunciosFlow {
 		WebElement div3 = DropdownInmuebles.findElement(By.className("dropdown"));
 		div3.click();
 
+		///////////////////////////
+
 		try {
 
 			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 			WebElement div4 = div3.findElement(By.tagName("div"));
 			List<WebElement> liListaBodega = div4.findElements(By.tagName("li"));
-			String propiedadTipo = pro.getProperty("inmueble");
+			String propiedadTipo = config.getProperty("inmueble");
 
 			for (WebElement opciones : liListaBodega) {
-				if (propiedadTipo.equalsIgnoreCase("bodegas") && opciones.getText().equalsIgnoreCase("Bodegas")) {
+				Thread.sleep(1000);
+				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("casas") && opciones.getText().equalsIgnoreCase("Casa")) {
+				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
@@ -95,14 +106,16 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("terrenos") && opciones.getText().equalsIgnoreCase("Terreno")) {
+				else if (propiedadTipo.toLowerCase().contains("terreno")
+						&& opciones.getText().equalsIgnoreCase("Terreno")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
 
-				else if (propiedadTipo.equalsIgnoreCase("oficinas") && opciones.getText().equalsIgnoreCase("Oficina")) {
+				else if (propiedadTipo.toLowerCase().contains("oficina")
+						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
@@ -115,60 +128,62 @@ public class PageInformador extends AbstractAnunciosFlow {
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
+
+		///////////////////////////
+
 		try {
-			String ubicacionBusqueda = pro.getProperty("ubicacion");
-	
-				if (ubicacionBusqueda.equalsIgnoreCase("zona metropolitana")) {
-					WebElement zonaMetro = driver.findElement(By.id("quick-search"));
-					System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-					zonaMetro.click();
-				}
+			String ubicacionBusqueda = config.getProperty("ubicacion");
+			Thread.sleep(1000);
+			
+			if (ubicacionBusqueda.equalsIgnoreCase("zona metropolitana")) {
+				WebElement zonaMetro = driver.findElement(By.id("quick-search"));
+				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
+				Thread.sleep(1000);
+				zonaMetro.click();
+			}
 
-				else if (ubicacionBusqueda.equalsIgnoreCase("zapopan")) {
+			else if (ubicacionBusqueda.equalsIgnoreCase("zapopan")) {
+				WebElement zapopan = driver.findElement(By.id("quick-searchZap"));
+				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
+				zapopan.click();
+			}
 
-					WebElement zapopan = driver.findElement(By.id("quick-searchZap"));
-					System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-					zapopan.click();
-				}
+			else if (ubicacionBusqueda.equalsIgnoreCase("guadalajara")) {
 
-				else if (ubicacionBusqueda.equalsIgnoreCase("guadalajara")) {
+				WebElement gdl = driver.findElement(By.id("quick-searchGdl"));
+				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
+				Thread.sleep(1000);
+				gdl.click();
+			}
 
-					WebElement gdl = driver.findElement(By.id("quick-searchGdl"));
-					System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-					gdl.click();
-				}
+			else if (ubicacionBusqueda.equalsIgnoreCase("tlaquepaque")) {
 
-				else if (ubicacionBusqueda.equalsIgnoreCase("tlaquepaque")) {
-
-					WebElement tlaque = driver.findElement(By.id("quick-searchTlaq"));
-					System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
-					tlaque.click();
-				}
+				WebElement tlaque = driver.findElement(By.id("quick-searchTlaq"));
+				System.out.println("Opción Seleccionada: " + pro.getProperty("ubicacion"));
+				Thread.sleep(1000);
+				tlaque.click();
+			}
 		}
 
 		catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		return anuncios;
+
 	}
 
+	///////////////////////////////////////////////////////////////////////////////
+
 	@Override
-	void hacerConsulta() {
-		List<Anuncio> anuncios = null;
-		anuncios = consulta();
-	}
-	@Override
-	 List<Anuncio> extraerGuardarDatos() {
+	List<Anuncio> extraerGuardarDatos() {
 
 		List<Anuncio> anuncios = null;
 		anuncios = extraerDatos();
 		System.out.println("Numero de anuncios en total descargados " + anuncios.size());
 		return anuncios;
-		
+
 	}
+
+	/////////////////////////////////////////////////////////////////////////////
 
 	private List<Anuncio> extraerDatos() {
 
@@ -190,7 +205,8 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
 				System.out.println("Teléfono: " + idx + " " + data.getTelefono());
-				
+				System.out.println("Precio: " + idx + " " + data.getPrecio());
+
 				anuncios.add(data);
 
 				try {
@@ -221,26 +237,38 @@ public class PageInformador extends AbstractAnunciosFlow {
 		System.out.println("Finished ");
 		return anuncios;
 	}
-	
+
 	private Anuncio getDataFromLink(WebDriver driver) {
 		Anuncio a = new Anuncio();
-		
+
 		WebElement desc = driver.findElement(By.className("detail-description"));
 		a.setDescripcion(desc.getText());
 		
 		try {
-			
-		WebElement telefono = driver.findElement(By.cssSelector("a[href*='tel']"));
-		String tel = telefono.getText();
-		a.setTelefono(tel);
-			
-		}
-		catch (Exception e) {
+
+			WebElement precioInmueble = driver.findElement(By.className("detail-view"));
+			WebElement precio = precioInmueble.findElement(By.tagName("h2"));
+			String costo = precio.getText();
+			a.setPrecio(costo);
+
+		} catch (Exception e) {
 			e.printStackTrace();
-			
+
+			System.out.println("El anuncio no tiene Precio");
+		}
+
+		try {
+
+			WebElement telefono = driver.findElement(By.cssSelector("a[href*='tel']"));
+			String tel = telefono.getText();
+			a.setTelefono(tel);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+
 			System.out.println("El anuncio no tiene Télefono");
 		}
-		
+
 		return a;
 	}
 }
