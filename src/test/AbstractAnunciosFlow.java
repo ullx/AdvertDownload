@@ -21,7 +21,7 @@ abstract class AbstractAnunciosFlow {
 	protected WebDriver driver;
 	protected Properties config;
 	protected BusquedaTipo inmuebleTipo;
-	String outputFileDir = "../resultados";
+	String outputFileDir = "resultados";
 	
 	public WebDriver setupDriver() {
 //		File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
@@ -71,12 +71,8 @@ abstract class AbstractAnunciosFlow {
 	abstract String getURL();
 	
 	public void runFlow() throws Exception {
-		//Leer configuracions para saber el tipo de busqueda y estado busqueda
 		
 		hacerConsulta();
-		
-		//TODO: Regresar los datos de los anuncios para despues aqui mismo
-		//mandar llamar al metodo para guardar los datos que se le pasen?
 		
 		List<Anuncio> anuncios =  extraerGuardarDatos();
 		exportToCSV(anuncios);

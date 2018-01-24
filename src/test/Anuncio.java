@@ -58,5 +58,4 @@ public class Anuncio {
 	public void setPrecio(String precio) {
 		this.precio = precio;
 	}
-	
 }

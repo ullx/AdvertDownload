@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.*;
 
-import java.util.List;
 import java.util.Properties;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +13,7 @@ import java.io.FileInputStream;
 public class testClass extends TestCase {
 
 	private WebDriver driver;
-	String configFilePath = "../config.properties";
+	String configFilePath = "config.properties";
 
 	
 	@Before
@@ -23,9 +22,19 @@ public class testClass extends TestCase {
 
 	@Test
 	public void testSimple() throws Exception {
-
 		Properties config = loadProperties();
 		
+		AbstractAnunciosFlow runFlow = null;
+		String pagina = config.getProperty("pagina");
+		
+		switch(pagina) {
+			case "vivanuncios" : runFlow = new PageVivanuncios(config);break;
+			case "informador" : runFlow = new PageInformador(config); break;
+			case "inmuebles24" : runFlow = new PageInmuebles24(config); break;
+		}
+		
+		driver = runFlow.setupDriver();
+		runFlow.runFlow();
 
 //		AbstractAnunciosFlow runFlow = new PageVivanuncios(config);
 //		driver = runFlow.setupDriver();
@@ -35,17 +44,19 @@ public class testClass extends TestCase {
 //		driver = runFlow.setupDriver();
 //		runFlow.runFlow();
 		
-		AbstractAnunciosFlow runFlow = new PageInformador(config);
-		driver = runFlow.setupDriver();
-		runFlow.runFlow();
+//		AbstractAnunciosFlow runFlow = new PageInformador(config);
+//		driver = runFlow.setupDriver();
+//		runFlow.runFlow();
 		
 //		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 //		Anuncio a = new Anuncio("transaccion", "inmueble", "descripcion", "telefono");
 //		anuncios.add(a);
 //
 //		exportToCSV(anuncios);
+		
+		
+		driver.quit();
 	}
-
 
 	
 	private Properties loadProperties() {

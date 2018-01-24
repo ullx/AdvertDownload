@@ -157,24 +157,25 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 	
 	private void seleccionarEstado(String estado) {
 		// si no se selecciona localidad toma para todo mexico
-		if (estado.equals("mexico") == false) {
-			driver.findElement(By.className("location-link")).click();
-			driver.findElement(By.id("modal-location")).sendKeys(estado);
-
-			WebElement estadosContainer = driver.findElement(By.className("pac-container"));
-			List<WebElement> estados = estadosContainer.findElements(By.className("pac-item"));
-			for (WebElement estadoSelect : estados) {
-				if (estadoSelect.getText().toLowerCase().contains(estado)) {
-					estadoSelect.click();
-					break;
-				}
-			}
-
-			//Click en boton aplicar ubicacion
-			WebDriverWait wait = new WebDriverWait(driver, 2000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("change-loc")));
-			driver.findElement(By.className("change-loc")).click();
+		if(estado.isEmpty() || estado.equalsIgnoreCase("nacional") || estado.equalsIgnoreCase("mexico")) {
+			estado = "méxico";
 		}
+		driver.findElement(By.className("location-link")).click();
+		driver.findElement(By.id("modal-location")).sendKeys(estado);
+
+		WebElement estadosContainer = driver.findElement(By.className("pac-container"));
+		List<WebElement> estados = estadosContainer.findElements(By.className("pac-item"));
+		for (WebElement estadoSelect : estados) {
+			if (estadoSelect.getText().toLowerCase().contains(estado)) {
+				estadoSelect.click();
+				break;
+			}
+		}
+
+		// Click en boton aplicar ubicacion
+		WebDriverWait wait = new WebDriverWait(driver, 2000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("change-loc")));
+		driver.findElement(By.className("change-loc")).click();
 	}
 
 	@Override
