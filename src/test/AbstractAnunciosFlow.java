@@ -2,9 +2,11 @@ package test;
 
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
@@ -91,22 +93,33 @@ abstract class AbstractAnunciosFlow {
 
 	abstract void hacerConsulta();
 	
-
-	public void exportToCSV(List<Anuncio> anuncios) {
+	public void exportToCSV(List<Anuncio> anuncios) throws UnsupportedEncodingException, FileNotFoundException {
+		System.out.println("Se escribiran " + anuncios.size());
 		String fileName = config.getProperty("inmueble") + " " + config.getProperty("transaccion") + ".csv";
-
-		File outputFilePath = new File(outputFileDir, fileName);
-		Writer writer = null;
 		
-		for (Anuncio a : anuncios) {
+		File dir = new File(outputFileDir);
+		if(dir.exists() == false) {
+			if(dir.mkdir() == false) {
+				System.out.println("No se pudo crear el directorio " + dir.getAbsolutePath());
+				dir = new File("C:/");
+			}
+		}
+		File outputFilePath = new File(dir, fileName);
+		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilePath), "utf-8"));
+		try {
+
+			for (Anuncio a : anuncios) {
+				String desc = a.getDescripcion().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
+				writer.write("                       ," + desc + a.getTelefono() + " numeroDeSucursal");
+				writer.newLine();
+
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
 			try {
-				writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(outputFilePath), "utf-8"));
-				writer.write(" ," + a.getDescripcion() + a.getTelefono() + " numeroDeSucursal");
-				((BufferedWriter) writer).newLine();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}finally {
-				try {writer.close();} catch (Exception e) {}
+				writer.close();
+			} catch (Exception e) {
 			}
 		}
 		System.out.println("Archivo output " + outputFilePath.getAbsolutePath());
