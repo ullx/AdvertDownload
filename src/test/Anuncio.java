@@ -18,6 +18,7 @@ public class Anuncio {
 		this.inmueble = inmueble;
 		this.descripcion = descripcion;
 		this.telefono = telefono;
+		this.precio = precio;
 	}
 	
 	public String getTransaccion() {

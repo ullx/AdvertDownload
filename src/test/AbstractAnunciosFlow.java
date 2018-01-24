@@ -106,7 +106,7 @@ abstract class AbstractAnunciosFlow {
 
 			for (Anuncio a : anuncios) {
 				String desc = a.getDescripcion().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
-				writer.write("                       ," + desc + a.getTelefono() + " numeroDeSucursal");
+				writer.write(String.format(",%s %s, %s, numeroSucursal", desc, a.getTelefono(), a.getPrecio()));
 				writer.newLine();
 
 			}
