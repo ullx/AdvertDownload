@@ -31,6 +31,7 @@ public class testClass extends TestCase {
 			case "vivanuncios" : runFlow = new PageVivanuncios(config);break;
 			case "informador" : runFlow = new PageInformador(config); break;
 			case "inmuebles24" : runFlow = new PageInmuebles24(config); break;
+			case "lamudi" : runFlow = new PageLamudi(config); break;
 		}
 		
 		driver = runFlow.setupDriver();

@@ -132,7 +132,6 @@ public class PageInformador extends AbstractAnunciosFlow {
 		try {
 
 			String ubicacionBusqueda = config.getProperty("ubicacion");
-
 			if (ubicacionBusqueda.equalsIgnoreCase("zona metropolitana")) {
 				WebElement zonaMetro = driver.findElement(By.id("quick-search"));
 				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));

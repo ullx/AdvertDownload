@@ -86,11 +86,11 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			if(transaccion.equalsIgnoreCase("venta")) {
 				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
 				retryingFindClick(by);
-				driver.findElement(by).click();
+//				driver.findElement(by).click();
 			}else {
 				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[2]/div/label/div/div");
 				retryingFindClick(by);
-				driver.findElement(by).click();
+//				driver.findElement(by).click();
 			}
 		}else if(tipoInmueble == BusquedaTipo.OFICINA) {
 			By dropDownList = By.id("L3Category");
@@ -109,34 +109,52 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			wait4.until(ExpectedConditions.visibilityOfElementLocated(By.className("filterContainer")));
 		}
 		
-		
-		if(transaccion.equalsIgnoreCase("venta")) {
-			By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
-			WebDriverWait wait = new WebDriverWait(driver, 2000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-			
-			retryingFindClick(by);
-			driver.findElement(by).click();
-		}else {
-			By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[2]/div/label/div/div");
-			WebDriverWait wait = new WebDriverWait(driver, 2000);
-			wait.until(ExpectedConditions.visibilityOfElementLocated(by));
-			retryingFindClick(by);
-			driver.findElement(by).click();
+		if (tipoInmueble != BusquedaTipo.TERRENO) {
+
+			if (transaccion.equalsIgnoreCase("venta")) {
+				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
+				WebDriverWait wait = new WebDriverWait(driver, 2000);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+
+				retryingFindClick(by);
+				// driver.findElement(by).click();
+			} else {
+				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[2]/div/label/div/div");
+				WebDriverWait wait = new WebDriverWait(driver, 2000);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(by));
+				retryingFindClick(by);
+				// driver.findElement(by).click();
+			}
 		}
 		
 		String precioMin = config.getProperty("precioMin");
 		String precioMax = config.getProperty("precioMax");
+		System.out.println("precio min " + precioMin);
+		System.out.println("precio max " + precioMax);
 		
 		if(precioMin != null && precioMax != null) {
+			try {
+				Thread.sleep(2000);
+			} catch (Exception e) {
+				// TODO: handle exception
+			}
 			driver.findElement(By.id("attr.Price.amountMin")).sendKeys(precioMin);
 			driver.findElement(By.id("attr.Price.amountMax")).sendKeys(precioMax);
 		}
 		
-		
+		try {
+			Thread.sleep(2000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 		//Click en aplicar filtros
-		driver.findElement(By.xpath("//*[@id=\"searchFilter\"]/div[3]/div/div")).click();
-		
+//		driver.findElement(By.xpath("//*[@id=\"searchFilter\"]/div[3]/div/div")).click();
+		driver.findElement(By.id("filterSendButton")).click();
+		try {
+			Thread.sleep(5000);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
 	}
 	
 	private boolean retryingFindClick(By by) {
@@ -218,8 +236,9 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				anuncios.add(data);
 
 				try {
-					WebElement regresar = driver.findElement(By.className("header-back"));
-					regresar.click();
+//					WebElement regresar = driver.findElement(By.className("header-back"));
+//					regresar.click();
+					driver.navigate().back();
 				} catch (NoSuchElementException e) {
 					System.out.println("No se encontro link regresar");
 					break;
