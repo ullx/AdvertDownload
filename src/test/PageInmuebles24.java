@@ -1,8 +1,10 @@
 package test;
 
+import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+import javax.swing.JFrame;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -14,6 +16,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	String baseURL = "http://www.inmuebles24.com/";
 	String estado = null;
 	Properties pro = null;
+	private Object frame;
 
 	@Override
 	String getURL() {
@@ -88,7 +91,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 					opciones.click();
 				}
 
-				else if (propiedadTipo.toLowerCase().contains("oficina") && opciones.getText().equalsIgnoreCase("Oficina")) {
+				else if (propiedadTipo.toLowerCase().contains("oficina")
+						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
 					System.out.println("Opción Seleccionada: " + a.getTransaccion());
 					opciones.click();
@@ -177,10 +181,11 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
 
 				System.out.println("Télefono: " + idx + " " + data.getTelefono());
-				
+
 				anuncios.add(data);
 
 				try {
+
 					WebElement regresar = driver.findElement(By.className("ticon-arrow-left"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
@@ -192,6 +197,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				listaResultados = seleccionarAnuncios.findElements(By.className("post"));
 
 			}
+
 			try {
 				siguiente = driver.findElement(By.className("ticon-next"));
 				if (siguiente.isEnabled()) {
@@ -211,6 +217,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 	private Anuncio getDataFromLink(WebDriver driver) {
 		Anuncio a = new Anuncio();
+		JFrame frame;
 
 		try {
 
@@ -219,6 +226,20 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			WebElement botonTel = driver.findElement(By.className("btn-phone-text"));
 			botonTel.click();
+			
+			try {
+				
+			driver.switchTo().defaultContent();
+			driver.switchTo().frame(driver.findElement(By.xpath("//*[@id=\'recaptcha_div\']/div/div/iframe")));
+			WebElement captcha = driver.findElement(By.className("recaptcha-anchor"));
+			List<WebElement> opciones = captcha.findElements(By.tagName("div"));
+			WebElement opcion = opciones.get(4);
+			opcion.click();
+			}
+			
+			catch (NoSuchElementException e) {
+				System.out.println("Captcha");
+			}
 
 			WebElement datoTelefono = driver.findElement(By.className("lead-phone"));
 			a.setTelefono(datoTelefono.getText());

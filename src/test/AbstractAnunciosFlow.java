@@ -92,7 +92,7 @@ abstract class AbstractAnunciosFlow {
 	public void exportToCSV(List<Anuncio> anuncios) throws UnsupportedEncodingException, FileNotFoundException {
 		System.out.println("Se escribiran " + anuncios.size());
 		String pagina = config.getProperty("pagina");
-		String fileName =pagina + " " + config.getProperty("inmueble") + " " + config.getProperty("transaccion") + ".csv";
+		String fileName =pagina + " " + config.getProperty("inmueble") + " " + config.getProperty("transaccion")  + " " + config.getProperty("ubicacion") + ".csv";
 		
 		
 		File dir = new File(outputFileDir);

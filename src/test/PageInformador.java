@@ -185,51 +185,58 @@ public class PageInformador extends AbstractAnunciosFlow {
 		WebElement siguiente = null;
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
 
-		for (;;) {
+		try {
 
-			driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-			WebElement municipio = driver.findElement(By.id("items"));
-			List<WebElement> listaResultados = municipio.findElements(By.tagName("li"));
-			int results = listaResultados.size();
-			System.out.println("Número de resultados: " + results);
+			for (;;) {
 
-			for (int idx = 0; idx < results; idx++) {
+				driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+				WebElement municipio = driver.findElement(By.id("items"));
+				List<WebElement> listaResultados = municipio.findElements(By.tagName("li"));
+				int results = listaResultados.size();
+				System.out.println("Número de resultados: " + results);
 
-				listaResultados.get(idx).click();
-				Anuncio data = getDataFromLink(driver);
+				for (int idx = 0; idx < results; idx++) {
 
-				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
-				System.out.println("Teléfono: " + idx + " " + data.getTelefono());
-				System.out.println("Precio: " + idx + " " + data.getPrecio());
+					listaResultados.get(idx).click();
+					Anuncio data = getDataFromLink(driver);
 
-				anuncios.add(data);
+					System.out.println("Descripción: " + idx + " " + data.getDescripcion());
+					System.out.println("Teléfono: " + idx + " " + data.getTelefono());
+					System.out.println("Precio: " + idx + " " + data.getPrecio());
 
+					anuncios.add(data);
+
+					try {
+						WebElement regresar = driver.findElement(By.linkText("< Regresar"));
+						regresar.click();
+					} catch (NoSuchElementException e) {
+						System.out.println("No se encontro link regresar");
+						break;
+					}
+
+					municipio = driver.findElement(By.id("items"));
+					listaResultados = municipio.findElements(By.tagName("li"));
+
+				}
 				try {
-					WebElement regresar = driver.findElement(By.linkText("< Regresar"));
-					regresar.click();
-				} catch (NoSuchElementException e) {
-					System.out.println("No se encontro link regresar");
+					siguiente = driver.findElement(By.linkText("Siguiente"));
+					if (siguiente.isEnabled()) {
+						siguiente.click();
+					}
+
+				} catch (WebDriverException e) {
+					System.out.println("Se llego al final de las paginas");
 					break;
 				}
 
-				municipio = driver.findElement(By.id("items"));
-				listaResultados = municipio.findElements(By.tagName("li"));
-
+				System.out.println("Terminando proceso");
 			}
-			try {
-				siguiente = driver.findElement(By.linkText("Siguiente"));
-				if (siguiente.isEnabled()) {
-					siguiente.click();
-				}
-
-			} catch (WebDriverException e) {
-				System.out.println("Se llego al final de las paginas");
-				break;
-			}
-
-			System.out.println("Terminando proceso");
+			System.out.println("Finished ");
 		}
-		System.out.println("Finished ");
+
+		catch (WebDriverException e) {
+			System.out.println("No se encontraron Resultados");
+		}
 		return anuncios;
 	}
 
