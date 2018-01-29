@@ -47,13 +47,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : transaccionesTipo) {
 				if (transaccionTipo.equalsIgnoreCase("venta") && opciones.getText().equalsIgnoreCase("Comprar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Rentar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
@@ -76,13 +76,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : seleccionarPropiedad) {
 				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -90,14 +90,14 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				else if (propiedadTipo.toLowerCase().contains("terreno")
 						&& opciones.getText().equalsIgnoreCase("Terreno / Lote")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("oficina")
 						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -167,13 +167,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
 				precioBoton.click();
 			} catch (NoSuchElementException e) {
-				System.out.println("No se ingresó rango de precios");
+				System.out.println("No se ingresÃ³ rango de precios");
 			}
 
 			WebElement seleccionarAnuncios = driver.findElement(By.className("list-posts"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("post"));
 			int results = listaResultados.size();
-			System.out.println("Número de resultados: " + results);
+			System.out.println("NÃºmero de resultados: " + results);
 
 			for (int idx = 0; idx < results; idx++) {
 
@@ -181,9 +181,9 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 				Anuncio data = getDataFromLink(driver);
 
-				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
+				System.out.println("DescripciÃ³n: " + idx + " " + data.getDescripcion());
 
-				System.out.println("Télefono: " + idx + " " + data.getTelefono());
+				System.out.println("TÃ©lefono: " + idx + " " + data.getTelefono());
 
 				anuncios.add(data);
 
@@ -192,7 +192,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 					WebElement regresar = driver.findElement(By.className("ticon-arrow-left"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
-					System.out.println("No se encontró link para regresar");
+					System.out.println("No se encontrÃ³ link para regresar");
 					break;
 				}
 
@@ -208,7 +208,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				}
 
 			} catch (WebDriverException e) {
-				System.out.println("Se llegó al final de las paginas");
+				System.out.println("Se llegÃ³ al final de las paginas");
 				break;
 			}
 
@@ -232,29 +232,18 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			botonTel.click();
 
 			try {
-
+				incheCaptcha(driver);
 				WebElement telefono = driver.findElement(By.className("lead-phone"));
-
-				if (telefono.isEnabled()) {
-					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
-
-				}
-
-				else {
-
-					incheCaptcha(driver);
-					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
-				}
-
+				datoTelefono = driver.findElement(By.className("lead-phone")).getText();
 			}
 
 			catch (NoSuchElementException e) {
 			}
-
-			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
-			driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-			//incheCaptcha(driver);
-			cerrarVentana.click();
+			driver.navigate().back();
+			//WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
+			//driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+			////incheCaptcha(driver);
+			//cerrarVentana.click();
 
 			// if (cerrarVentana.isEnabled()) {
 			// cerrarVentana.click();
@@ -267,7 +256,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			// }
 
 		} catch (NoSuchElementException e) {
-			System.out.println("No se encontro télefono o descripción");
+			System.out.println("No se encontro tÃ©lefono o descripciÃ³n");
 		}
 
 		a.setTelefono(datoTelefono);
@@ -277,10 +266,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	private void incheCaptcha(WebDriver driver) {
 		driver.switchTo().defaultContent();
 		WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
-		driver.switchTo().frame(iframe);
-		JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
-		WebDriverWait wait = new WebDriverWait(driver, 2000);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+		
+		if(iframe != null){
+			driver.switchTo().frame(iframe);
+			JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
+			WebDriverWait wait = new WebDriverWait(driver, 2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+		}
 	}
 
 }
