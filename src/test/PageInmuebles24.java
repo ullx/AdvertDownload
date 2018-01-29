@@ -1,22 +1,25 @@
 package test;
 
-import java.awt.Window;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.swing.JFrame;
+import java.util.concurrent.TimeUnit;
+
+import javax.swing.JOptionPane;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 	String baseURL = "http://www.inmuebles24.com/";
 	String estado = null;
 	Properties pro = null;
-	private Object frame;
 
 	@Override
 	String getURL() {
@@ -216,8 +219,9 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	}
 
 	private Anuncio getDataFromLink(WebDriver driver) {
+
 		Anuncio a = new Anuncio();
-		JFrame frame;
+		String datoTelefono = "";
 
 		try {
 
@@ -226,32 +230,57 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			WebElement botonTel = driver.findElement(By.className("btn-phone-text"));
 			botonTel.click();
-			
+
 			try {
-				
-			driver.switchTo().defaultContent();
-			driver.switchTo().frame(driver.findElement(By.xpath("//*[@id=\'recaptcha_div\']/div/div/iframe")));
-			WebElement captcha = driver.findElement(By.className("recaptcha-anchor"));
-			List<WebElement> opciones = captcha.findElements(By.tagName("div"));
-			WebElement opcion = opciones.get(4);
-			opcion.click();
-			}
-			
-			catch (NoSuchElementException e) {
-				System.out.println("Captcha");
+
+				WebElement telefono = driver.findElement(By.className("lead-phone"));
+
+				if (telefono.isEnabled()) {
+					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
+
+				}
+
+				else {
+
+					incheCaptcha(driver);
+					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
+				}
+
 			}
 
-			WebElement datoTelefono = driver.findElement(By.className("lead-phone"));
-			a.setTelefono(datoTelefono.getText());
+			catch (NoSuchElementException e) {
+			}
 
 			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
+			driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
+			//incheCaptcha(driver);
 			cerrarVentana.click();
+
+			// if (cerrarVentana.isEnabled()) {
+			// cerrarVentana.click();
+			// }
+			//
+			// else {
+			//
+			// incheCaptcha();
+			// cerrarVentana.click();
+			// }
 
 		} catch (NoSuchElementException e) {
 			System.out.println("No se encontro télefono o descripción");
 		}
 
+		a.setTelefono(datoTelefono);
 		return a;
+	}
+
+	private void incheCaptcha(WebDriver driver) {
+		driver.switchTo().defaultContent();
+		WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
+		driver.switchTo().frame(iframe);
+		JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
+		WebDriverWait wait = new WebDriverWait(driver, 2000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
 	}
 
 }
