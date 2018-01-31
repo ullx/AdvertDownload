@@ -1,15 +1,15 @@
 package test;
 
+import java.awt.Toolkit;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import java.util.concurrent.TimeUnit;
-
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -239,20 +239,16 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			botonTel.click();
 
 			try {
-				
-				driver.switchTo().defaultContent();
-				WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
-				driver.switchTo().frame(iframe);
-				JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
-				WebDriverWait wait = new WebDriverWait(driver, 2000);
-				wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
-				
+
+				incheCaptcha();
+
 				WebElement Telefono = driver.findElement(By.className("lead-phone"));
 				datoTelefono = Telefono.getText();
 
 			}
 
 			catch (NoSuchElementException e) {
+
 			}
 
 			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
@@ -266,14 +262,15 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		return a;
 	}
 
-	// private void incheCaptcha(WebDriver driver) {
-	// driver.switchTo().defaultContent();
-	// WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div
-	// iframe"));
-	// driver.switchTo().frame(iframe);
-	// JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
-	// WebDriverWait wait = new WebDriverWait(driver, 2000);
-	// wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
-	// }
+	private void incheCaptcha() {
+
+		driver.switchTo().defaultContent();
+		WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
+		driver.switchTo().frame(iframe);
+		Toolkit.getDefaultToolkit().beep();
+		JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",JOptionPane.WARNING_MESSAGE);
+		WebDriverWait wait = new WebDriverWait(driver, 2000);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+	}
 
 }
