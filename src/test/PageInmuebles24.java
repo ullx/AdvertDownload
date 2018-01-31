@@ -9,6 +9,7 @@ import javax.swing.JOptionPane;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.StaleElementReferenceException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
@@ -170,8 +171,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				System.out.println("No se ingresó rango de precios");
 			}
 
-			WebElement seleccionarAnuncios = driver.findElement(By.className("list-posts"));
-			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("post"));
+			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
+			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 			int results = listaResultados.size();
 			System.out.println("Número de resultados: " + results);
 
@@ -185,6 +186,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 				System.out.println("Télefono: " + idx + " " + data.getTelefono());
 
+				System.out.println("Precio: " + idx + " " + data.getPrecio());
+
 				anuncios.add(data);
 
 				try {
@@ -196,8 +199,8 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 					break;
 				}
 
-				seleccionarAnuncios = driver.findElement(By.className("list-posts"));
-				listaResultados = seleccionarAnuncios.findElements(By.className("post"));
+				seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
+				listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 
 			}
 
@@ -228,23 +231,24 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			WebElement descripccionPropiedad = driver.findElement(By.className("description-body"));
 			a.setDescripcion(descripccionPropiedad.getText());
 
+			WebElement precioPropiedad = driver.findElement(By.className("precios"));
+			WebElement precioInmueble = precioPropiedad.findElement(By.tagName("strong"));
+			a.setPrecio(precioInmueble.getText());
+
 			WebElement botonTel = driver.findElement(By.className("btn-phone-text"));
 			botonTel.click();
 
 			try {
-
-				WebElement telefono = driver.findElement(By.className("lead-phone"));
-
-				if (telefono.isEnabled()) {
-					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
-
-				}
-
-				else {
-
-					incheCaptcha(driver);
-					datoTelefono = driver.findElement(By.className("lead-phone")).getText();
-				}
+				
+				driver.switchTo().defaultContent();
+				WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
+				driver.switchTo().frame(iframe);
+				JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
+				WebDriverWait wait = new WebDriverWait(driver, 2000);
+				wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+				
+				WebElement Telefono = driver.findElement(By.className("lead-phone"));
+				datoTelefono = Telefono.getText();
 
 			}
 
@@ -252,19 +256,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			}
 
 			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
-			driver.manage().timeouts().implicitlyWait(100, TimeUnit.SECONDS);
-			//incheCaptcha(driver);
 			cerrarVentana.click();
-
-			// if (cerrarVentana.isEnabled()) {
-			// cerrarVentana.click();
-			// }
-			//
-			// else {
-			//
-			// incheCaptcha();
-			// cerrarVentana.click();
-			// }
 
 		} catch (NoSuchElementException e) {
 			System.out.println("No se encontro télefono o descripción");
@@ -274,13 +266,14 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		return a;
 	}
 
-	private void incheCaptcha(WebDriver driver) {
-		driver.switchTo().defaultContent();
-		WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
-		driver.switchTo().frame(iframe);
-		JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
-		WebDriverWait wait = new WebDriverWait(driver, 2000);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
-	}
+	// private void incheCaptcha(WebDriver driver) {
+	// driver.switchTo().defaultContent();
+	// WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div
+	// iframe"));
+	// driver.switchTo().frame(iframe);
+	// JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:");
+	// WebDriverWait wait = new WebDriverWait(driver, 2000);
+	// wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+	// }
 
 }
