@@ -1,12 +1,9 @@
 package test;
 
 import java.awt.Toolkit;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-import javax.sound.sampled.LineUnavailableException;
-import javax.sound.sampled.UnsupportedAudioFileException;
 import javax.swing.JOptionPane;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -48,13 +45,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : transaccionesTipo) {
 				if (transaccionTipo.equalsIgnoreCase("venta") && opciones.getText().equalsIgnoreCase("Comprar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Rentar")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
@@ -77,13 +74,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : seleccionarPropiedad) {
 				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -91,14 +88,14 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				else if (propiedadTipo.toLowerCase().contains("terreno")
 						&& opciones.getText().equalsIgnoreCase("Terreno / Lote")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("oficina")
 						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					System.out.println("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -168,13 +165,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
 				precioBoton.click();
 			} catch (NoSuchElementException e) {
-				System.out.println("No se ingresó rango de precios");
+				System.out.println("No se ingresÃ³ rango de precios");
 			}
 
 			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 			int results = listaResultados.size();
-			System.out.println("Número de resultados: " + results);
+			System.out.println("NÃºmero de resultados: " + results);
 
 			for (int idx = 0; idx < results; idx++) {
 
@@ -239,23 +236,26 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			botonTel.click();
 
 			try {
-
+				
 				incheCaptcha();
-
-				WebElement Telefono = driver.findElement(By.className("lead-phone"));
-				datoTelefono = Telefono.getText();
-
+				
+				WebElement telefono = driver.findElement(By.className("lead-phone"));
+				a.setTelefono(telefono.getText());
 			}
+			
+			// ya vi, deja lo checo lo corro y a ver si esta como lo deje
 
 			catch (NoSuchElementException e) {
 
 			}
 
+
 			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
 			cerrarVentana.click();
 
+
 		} catch (NoSuchElementException e) {
-			System.out.println("No se encontro télefono o descripción");
+			System.out.println("No se encontro tÃ©lefono o descripciÃ³n");
 		}
 
 		a.setTelefono(datoTelefono);
