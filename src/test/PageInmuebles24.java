@@ -236,29 +236,25 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			botonTel.click();
 
 			try {
-				
 				incheCaptcha();
 				
 				WebElement telefono = driver.findElement(By.className("lead-phone"));
 				a.setTelefono(telefono.getText());
+			}catch (NoSuchElementException e) {
+				
+				Utils.retryingFind(driver, By.className("lead-phone"));
+				WebElement telefono = driver.findElement(By.className("lead-phone"));
+				a.setTelefono(telefono.getText());
 			}
 			
-			// ya vi, deja lo checo lo corro y a ver si esta como lo deje
-
-			catch (NoSuchElementException e) {
-
-			}
-
-
-			WebElement cerrarVentana = driver.findElement(By.className("fa-times"));
+			WebElement cerrarVentana = driver.findElement(By.className("recomendado-lead-close"));
 			cerrarVentana.click();
-
 
 		} catch (NoSuchElementException e) {
 			System.out.println("No se encontro télefono o descripción");
 		}
 
-		a.setTelefono(datoTelefono);
+//		a.setTelefono(datoTelefono);
 		return a;
 	}
 
