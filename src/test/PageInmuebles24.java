@@ -221,7 +221,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	private Anuncio getDataFromLink(WebDriver driver) {
 
 		Anuncio a = new Anuncio();
-		String datoTelefono = "";
 
 		try {
 
@@ -237,16 +236,17 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			try {
 				incheCaptcha();
-				
+
+				Utils.retryingFind(driver, By.className("lead-phone"));
 				WebElement telefono = driver.findElement(By.className("lead-phone"));
 				a.setTelefono(telefono.getText());
-			}catch (NoSuchElementException e) {
-				
+			} catch (NoSuchElementException e) {
+
 				Utils.retryingFind(driver, By.className("lead-phone"));
 				WebElement telefono = driver.findElement(By.className("lead-phone"));
 				a.setTelefono(telefono.getText());
 			}
-			
+
 			WebElement cerrarVentana = driver.findElement(By.className("recomendado-lead-close"));
 			cerrarVentana.click();
 
@@ -254,7 +254,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			System.out.println("No se encontro télefono o descripción");
 		}
 
-//		a.setTelefono(datoTelefono);
 		return a;
 	}
 
@@ -262,11 +261,15 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		driver.switchTo().defaultContent();
 		WebElement iframe = driver.findElement(By.cssSelector("div#recaptcha_div iframe"));
-		driver.switchTo().frame(iframe);
-		Toolkit.getDefaultToolkit().beep();
-		JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",JOptionPane.WARNING_MESSAGE);
-		WebDriverWait wait = new WebDriverWait(driver, 2000);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+		if (iframe != null) {
+
+			driver.switchTo().frame(iframe);
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",
+					JOptionPane.WARNING_MESSAGE);
+			WebDriverWait wait = new WebDriverWait(driver, 5000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
+		}
 	}
 
 }
