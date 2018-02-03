@@ -116,7 +116,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			wait4.until(ExpectedConditions.visibilityOfElementLocated(By.className("filterContainer")));
 		}
 		
-		if (tipoInmueble != BusquedaTipo.TERRENO) {
+		if (tipoInmueble != BusquedaTipo.TERRENO && tipoInmueble != BusquedaTipo.CASA) {
 
 			if (transaccion.equalsIgnoreCase("venta")) {
 				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
@@ -326,15 +326,26 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 	private Anuncio getDataFromLink(WebDriver driver) {
 		Anuncio a = new Anuncio();
 		String tel = "";
-
-		WebElement desc = driver.findElement(By.className("ad-description"));
-		a.setDescripcion(desc.getText());
-
+		try {
+			WebElement desc = driver.findElement(By.className("ad-description"));
+			a.setDescripcion(desc.getText());
+		} catch (Exception e) {
+			log.debug(e.getMessage(), e);
+		}
+		
+		try {
+			a.setPrecio(driver.findElement(By.xpath("//*[@id=\"viewPage\"]/div[4]/div/div[1]/div[2]/span/span")).getText());
+			log.info("Precio " + a.getPrecio());
+		} catch (Exception e) {
+			log.debug(e.getMessage(), e);
+		}
+		
 		try {
 			driver.findElement(By.className("show-phone")).click();
 			tel = driver.findElement(By.className("real-phone")).findElement(By.tagName("a")).getText();
 
 		} catch (NoSuchElementException e) {
+			log.debug(e.getMessage(), e);
 		}
 
 		a.setTelefono(tel);

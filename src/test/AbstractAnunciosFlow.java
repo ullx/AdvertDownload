@@ -25,6 +25,7 @@ abstract class AbstractAnunciosFlow {
 	protected Properties config;
 	protected BusquedaTipo inmuebleTipo;
 	String outputFileDir = "resultados";
+	String transaccionConfig = null;
 	
 	public WebDriver setupDriver() {
 //		File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
@@ -43,7 +44,7 @@ abstract class AbstractAnunciosFlow {
 	
 	public AbstractAnunciosFlow(Properties config) {
 		this.config = config;
-		String transaccionConfig = config.getProperty("transaccion");
+		 transaccionConfig = config.getProperty("transaccion");
 		String inmuebleConfig = config.getProperty("inmueble");
 		String ubicacionConfig = config.getProperty("ubicacion") != null? config.getProperty("ubicacion") : "";
 		String precioMinConfig = config.getProperty("precioMin");
@@ -111,7 +112,7 @@ abstract class AbstractAnunciosFlow {
 
 			for (Anuncio a : anuncios) {
 				String desc = a.getDescripcion().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
-				writer.write(String.format(",%s %s, %s, numeroSucursal", desc, a.getTelefono(), a.getPrecio().replaceAll(",", "")));
+				writer.write(String.format(",%s %s, %s, %s, numeroSucursal", desc, a.getTelefono(), a.getPrecio().replaceAll(",", ""),transaccionConfig ));
 				writer.newLine();
 
 			}

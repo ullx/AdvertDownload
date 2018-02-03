@@ -1,10 +1,18 @@
 package test;
 
 import java.awt.Toolkit;
+import java.io.File;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -264,12 +272,38 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		if (iframe != null) {
 
 			driver.switchTo().frame(iframe);
-			Toolkit.getDefaultToolkit().beep();
+			playSound();
+//			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",
 					JOptionPane.WARNING_MESSAGE);
+			
+			
 			WebDriverWait wait = new WebDriverWait(driver, 5000);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
 		}
+	}
+
+	private void playSound() {
+		try {
+			URL url = ClassLoader.getSystemResource("censor-beep-2.wav");
+			Clip clip = AudioSystem.getClip();
+			// getAudioInputStream() also accepts a File or InputStream
+			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
+			clip.open(ais);
+//			clip.loop(Clip.LOOP_CONTINUOUSLY);
+			clip.loop(10);
+//			SwingUtilities.invokeLater(new Runnable() {
+//				public void run() {
+//					// A GUI element to prevent the Clip's daemon Thread
+//					// from terminating at the end of the main()
+//					JOptionPane.showMessageDialog(null, "Ingresa Captcha para continuar");
+//				}
+//			});
+		} catch (Exception e) {
+			log.info("Error al lanzar el mensaje para resolver captcha");
+		}
+		
+		
 	}
 
 }
