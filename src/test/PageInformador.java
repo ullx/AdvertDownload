@@ -54,14 +54,14 @@ public class PageInformador extends AbstractAnunciosFlow {
 				if (transaccionTipo.equalsIgnoreCase("venta")
 						&& opciones.getText().equalsIgnoreCase("Venta / Traspaso")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
 
 				else if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Renta")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
@@ -91,14 +91,14 @@ public class PageInformador extends AbstractAnunciosFlow {
 				Thread.sleep(1000);
 				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 
@@ -107,7 +107,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 				else if (propiedadTipo.toLowerCase().contains("terreno")
 						&& opciones.getText().equalsIgnoreCase("Terreno")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 				}
@@ -115,7 +115,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 				else if (propiedadTipo.toLowerCase().contains("oficina")
 						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
-					System.out.println("Opción Seleccionada: " + a.getTransaccion());
+					log.info("Opción Seleccionada: " + a.getTransaccion());
 					Thread.sleep(1000);
 					opciones.click();
 
@@ -134,27 +134,27 @@ public class PageInformador extends AbstractAnunciosFlow {
 			String ubicacionBusqueda = config.getProperty("ubicacion");
 			if (ubicacionBusqueda.equalsIgnoreCase("zona metropolitana")) {
 				WebElement zonaMetro = driver.findElement(By.id("quick-search"));
-				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
+				log.info("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				zonaMetro.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("zapopan")) {
 				WebElement zapopan = driver.findElement(By.id("quick-searchZap"));
-				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
+				log.info("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				zapopan.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("guadalajara")) {
 
 				WebElement gdl = driver.findElement(By.id("quick-searchGdl"));
-				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
+				log.info("Opción Seleccionada: " + config.getProperty("ubicacion"));
 				gdl.click();
 			}
 
 			else if (ubicacionBusqueda.equalsIgnoreCase("tlaquepaque")) {
 
 				WebElement tlaque = driver.findElement(By.id("quick-searchTlaq"));
-				System.out.println("Opción Seleccionada: " + config.getProperty("ubicacion"));
+				log.info("Opción Seleccionada: " + config.getProperty("ubicacion"));
 
 				tlaque.click();
 			}
@@ -173,7 +173,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 		List<Anuncio> anuncios = null;
 		anuncios = extraerDatos();
-		System.out.println("Numero de anuncios en total descargados " + anuncios.size());
+		log.info("Numero de anuncios en total descargados " + anuncios.size());
 		return anuncios;
 
 	}
@@ -189,20 +189,21 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 			for (;;) {
 
+
 				driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 				WebElement municipio = driver.findElement(By.id("items"));
 				List<WebElement> listaResultados = municipio.findElements(By.tagName("li"));
 				int results = listaResultados.size();
-				System.out.println("Número de resultados: " + results);
+				log.info("Número de resultados: " + results);
 
 				for (int idx = 0; idx < results; idx++) {
 
 					listaResultados.get(idx).click();
 					Anuncio data = getDataFromLink(driver);
 
-					System.out.println("Descripción: " + idx + " " + data.getDescripcion());
-					System.out.println("Teléfono: " + idx + " " + data.getTelefono());
-					System.out.println("Precio: " + idx + " " + data.getPrecio());
+					log.info("Descripción: " + idx + " " + data.getDescripcion());
+					log.info("Teléfono: " + idx + " " + data.getTelefono());
+					log.info("Precio: " + idx + " " + data.getPrecio());
 
 					anuncios.add(data);
 
@@ -210,7 +211,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 						WebElement regresar = driver.findElement(By.linkText("< Regresar"));
 						regresar.click();
 					} catch (NoSuchElementException e) {
-						System.out.println("No se encontro link regresar");
+						log.info("No se encontro link regresar");
 						break;
 					}
 
@@ -225,17 +226,17 @@ public class PageInformador extends AbstractAnunciosFlow {
 					}
 
 				} catch (WebDriverException e) {
-					System.out.println("Se llego al final de las paginas");
+					log.info("Se llego al final de las paginas");
 					break;
 				}
 
-				System.out.println("Terminando proceso");
+				log.info("Terminando proceso");
 			}
-			System.out.println("Finished ");
+			log.info("Finished ");
 		}
 
 		catch (WebDriverException e) {
-			System.out.println("No se encontraron Resultados");
+			log.info("No se encontraron Resultados");
 		}
 		return anuncios;
 	}
@@ -256,7 +257,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			System.out.println("El anuncio no tiene Precio");
+			log.info("El anuncio no tiene Precio");
 		}
 
 		try {
@@ -268,7 +269,7 @@ public class PageInformador extends AbstractAnunciosFlow {
 		} catch (Exception e) {
 			e.printStackTrace();
 
-			System.out.println("El anuncio no tiene Télefono");
+			log.info("El anuncio no tiene Télefono");
 		}
 
 		return a;

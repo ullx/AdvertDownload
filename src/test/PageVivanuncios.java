@@ -81,15 +81,17 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		WebDriverWait wait2 = new WebDriverWait(driver, 2000);
 		wait2.until(ExpectedConditions.visibilityOfElementLocated(By.id("filterScreenTakeOver")));
 		
-		
+		log.debug("tipoInmueble " + tipoInmueble);
 		if(tipoInmueble == BusquedaTipo.BODEGA) {
 			if(transaccion.equalsIgnoreCase("venta")) {
-				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
-				retryingFindClick(by);
+				log.debug("Seleccionando venta");
+				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/input");  //  "//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
+				log.debug("slected {}",retryingFindClick(by));
 //				driver.findElement(by).click();
 			}else {
+				log.debug("Seleccionando renta");
 				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[2]/div/label/div/div");
-				retryingFindClick(by);
+				log.debug("slected {}",retryingFindClick(by) );
 //				driver.findElement(by).click();
 			}
 		}else if(tipoInmueble == BusquedaTipo.OFICINA) {
@@ -103,6 +105,11 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 					opt.click();
 					break;
 				}
+			}
+			try {
+				Thread.sleep(2000);
+			} catch (Exception e) {
+				// TODO: handle exception
 			}
 			
 			WebDriverWait wait4 = new WebDriverWait(driver, 2000);
@@ -129,8 +136,8 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		
 		String precioMin = config.getProperty("precioMin");
 		String precioMax = config.getProperty("precioMax");
-		System.out.println("precio min " + precioMin);
-		System.out.println("precio max " + precioMax);
+		log.info("precio min " + precioMin);
+		log.info("precio max " + precioMax);
 		
 		if(precioMin != null && precioMax != null) {
 			try {
@@ -166,7 +173,9 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
                 result = true;
                 break;
             } catch(StaleElementReferenceException e) {
+            	log.debug(e);
             } catch(WebDriverException e) {
+            	log.debug(e);
             }
             attempts++;
         }
@@ -198,16 +207,15 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 
 	@Override
 	List<Anuncio> extraerGuardarDatos() {
-//List<WebElement> anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-panel tileWrapper LandscapeMode"));
 		
 		List<Anuncio> anuncios = null;
 		
-		if(estado.equals(("jalisco"))) {
-			anuncios = getDatosBusquedaJalisco();
-		}else {
+//		if(estado.equals(("jalisco"))) {
+//			anuncios = getDatosBusquedaJalisco();
+//		}else {
 			anuncios = getDatosBusqueda();
-		}
-		System.out.println("Numero de anuncios en total descargados " + anuncios.size());
+//		}
+		log.info("Numero de anuncios en total descargados " + anuncios.size());
 		return anuncios;
 	}
 	
@@ -219,7 +227,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			List<WebElement> anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-panel"));
 			int results = anunciosTitles.size();
 			
-			System.out.println("Pagina: " + countPagina + " Número de resultados" + results);
+			log.info("Pagina: " + countPagina + " Número de resultados" + results);
 			
 			for (int idx = 0; idx < results; idx++) {
 
@@ -227,12 +235,12 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 						
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].scrollIntoView()", elementToClick); 
-				System.out.println("clicking " + elementToClick.getText());
+				log.info("clicking " + elementToClick.getText());
 				elementToClick.click();
 				
 				Anuncio data = getDataFromLink(driver);
 
-				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
+				log.info("Descripción: " + idx + " " + data.getDescripcion());
 				anuncios.add(data);
 
 				try {
@@ -240,7 +248,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 //					regresar.click();
 					driver.navigate().back();
 				} catch (NoSuchElementException e) {
-					System.out.println("No se encontro link regresar");
+					log.info("No se encontro link regresar");
 					break;
 				}
 
@@ -260,11 +268,11 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			List<WebElement> anunciosTitles = driver.findElement(By.className("results")).findElements(By.className("title"));
 			
 			int results = anunciosTitles.size();
-			System.out.println("Número de resultados: " + results);
+			log.info("Número de resultados: " + results);
 			
 			for (int idx = 0; idx < results; idx++) {
 
-//				System.out.println(anunciosTitles.get(idx).getText());
+//				log.info(anunciosTitles.get(idx).getText());
 				WebElement el = anunciosTitles.get(idx).findElement(By.tagName("a"));
 				JavascriptExecutor jse = (JavascriptExecutor)driver;
 
@@ -273,16 +281,16 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				
 				Anuncio data = getDataFromLink(driver);
 
-//				System.out.println("Contacto: " + idx + " " + data.getNombreAutor());
-				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
-//				System.out.println("Teléfono: " + idx + " " + data.getTel());
+//				log.info("Contacto: " + idx + " " + data.getNombreAutor());
+				log.info("Descripción: " + idx + " " + data.getDescripcion());
+//				log.info("Teléfono: " + idx + " " + data.getTel());
 				anuncios.add(data);
 
 				try {
 					WebElement regresar = driver.findElement(By.className("header-back"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
-					System.out.println("No se encontro link regresar");
+					log.info("No se encontro link regresar");
 					break;
 				}
 
@@ -332,5 +340,13 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		a.setTelefono(tel);
 		return a;
 	}
-
+	
+	private void uglyWait(long millis) {
+		try {
+			Thread.sleep(millis);
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
 }

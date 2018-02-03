@@ -12,11 +12,14 @@ import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 abstract class AbstractAnunciosFlow {
 	
+	public static Logger log = LogManager.getLogger(AbstractAnunciosFlow.class);
 	String chromeDriverPath = "chromedriver.exe";
 	protected WebDriver driver;
 	protected Properties config;
@@ -26,7 +29,7 @@ abstract class AbstractAnunciosFlow {
 	public WebDriver setupDriver() {
 //		File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		File file = new File(chromeDriverPath);
-		System.out.println("searching for driver " + file.getAbsolutePath());
+		log.info("searching for driver " + file.getAbsolutePath());
 		System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
 		
 		//DesiredCapabilities.chrome()
@@ -46,12 +49,12 @@ abstract class AbstractAnunciosFlow {
 		String precioMinConfig = config.getProperty("precioMin");
 		String precioMaxConfig = config.getProperty("precioMax");
 		
-		System.out.println("Parametros de búsqueda: ");
-		System.out.println("Transacción: ---" + transaccionConfig);
-		System.out.println("Inmuebles  : ---" + inmuebleConfig);
-		System.out.println("Ubicación  : ---" + ubicacionConfig);
-		System.out.println("Precio Min : ---" + precioMinConfig);
-		System.out.println("Precio Max : ---" + precioMaxConfig);
+		log.info("Parametros de búsqueda: ");
+		log.info("Transacción: ---" + transaccionConfig);
+		log.info("Inmuebles  : ---" + inmuebleConfig);
+		log.info("Ubicación  : ---" + ubicacionConfig);
+		log.info("Precio Min : ---" + precioMinConfig);
+		log.info("Precio Max : ---" + precioMaxConfig);
 		
 		
 		this.inmuebleTipo = BusquedaTipo.getValueOf(inmuebleConfig);
@@ -90,7 +93,7 @@ abstract class AbstractAnunciosFlow {
 	abstract void hacerConsulta();
 	
 	public void exportToCSV(List<Anuncio> anuncios) throws UnsupportedEncodingException, FileNotFoundException {
-		System.out.println("Se escribiran " + anuncios.size());
+		log.info("Se escribiran " + anuncios.size());
 		String pagina = config.getProperty("pagina");
 		String fileName =pagina + " " + config.getProperty("inmueble") + " " + config.getProperty("transaccion")  + " " + config.getProperty("ubicacion") + ".csv";
 		
@@ -98,7 +101,7 @@ abstract class AbstractAnunciosFlow {
 		File dir = new File(outputFileDir);
 		if(dir.exists() == false) {
 			if(dir.mkdir() == false) {
-				System.out.println("No se pudo crear el directorio " + dir.getAbsolutePath());
+				log.info("No se pudo crear el directorio " + dir.getAbsolutePath());
 				dir = new File("C:/");
 			}
 		}
@@ -120,7 +123,7 @@ abstract class AbstractAnunciosFlow {
 			} catch (Exception e) {
 			}
 		}
-		System.out.println("Archivo output " + outputFilePath.getAbsolutePath());
+		log.info("Archivo output " + outputFilePath.getAbsolutePath());
 	}
 	
 }

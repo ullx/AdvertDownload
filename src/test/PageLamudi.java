@@ -64,7 +64,7 @@ public class PageLamudi extends AbstractAnunciosFlow {
 			
 			
 			for (WebElement opt : options) {
-				System.out.println(opt.getText());
+				log.info(opt.getText());
 				if (opt.getText().contains(inmuebleTipo.toString().toLowerCase())) {
 					opt.click();
 				}
@@ -98,7 +98,7 @@ public class PageLamudi extends AbstractAnunciosFlow {
 			List<WebElement> anunciosTitles = driver.findElement(By.id("pnlPropertiesListPanel")).findElements(By.className("highlight-box"));
 			int results = anunciosTitles.size();
 			
-			System.out.println("Pagina: " + countPagina + " Número de resultados" + results);
+			log.info("Pagina: " + countPagina + " Número de resultados" + results);
 			
 			for (int idx = results; idx < results; idx++) {
 
@@ -106,21 +106,21 @@ public class PageLamudi extends AbstractAnunciosFlow {
 						
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].scrollIntoView()", anuncioContainer); 
-				System.out.println("clicking " + anuncioContainer.getText());
+				log.info("clicking " + anuncioContainer.getText());
 				
 				
 				anuncioContainer.findElement(By.className("listing-info")).findElement(By.tagName("a")).click();
 				
 				Anuncio data = getDataFromLink(driver);
 
-				System.out.println("Descripción: " + idx + " " + data.getDescripcion());
+				log.info("Descripción: " + idx + " " + data.getDescripcion());
 				anuncios.add(data);
 
 				try {
 					WebElement regresar = driver.findElement(By.className("header-back"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
-					System.out.println("No se encontro link regresar");
+					log.info("No se encontro link regresar");
 					break;
 				}
 
