@@ -116,7 +116,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			wait4.until(ExpectedConditions.visibilityOfElementLocated(By.className("filterContainer")));
 		}
 		
-		if (tipoInmueble != BusquedaTipo.TERRENO && tipoInmueble != BusquedaTipo.CASA) {
+		if (tipoInmueble != BusquedaTipo.TERRENO && tipoInmueble != BusquedaTipo.CASA && tipoInmueble != BusquedaTipo.BODEGA) {
 
 			if (transaccion.equalsIgnoreCase("venta")) {
 				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
