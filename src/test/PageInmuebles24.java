@@ -1,18 +1,13 @@
 package test;
 
-import java.awt.Toolkit;
-import java.io.File;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
-
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.swing.JOptionPane;
-import javax.swing.SwingUtilities;
-
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -67,7 +62,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		}
 
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 
 		///////////
@@ -111,7 +106,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		}
 
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error("Error en captura inmueble", e);
 		}
 
 		///////////
@@ -141,7 +136,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		}
 
 		catch (Exception e) {
-			e.printStackTrace();
+			log.error(e.getMessage(), e);
 		}
 
 	}
@@ -162,19 +157,20 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		WebElement siguiente = null;
 		List<Anuncio> anuncios = new ArrayList<Anuncio>();
+		try {
+			WebElement precioMinimo = driver.findElement(By.id("preciomin"));
+			precioMinimo.sendKeys(config.getProperty("precioMin"));
+			WebElement precioMaximo = driver.findElement(By.id("preciomax"));
+			precioMaximo.sendKeys(config.getProperty("precioMax"));
+			WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
+			precioBoton.click();
+		} catch (NoSuchElementException e) {
+			log.info("No se ingresó rango de precios");
+		}
 
 		for (;;) {
 
-			try {
-				WebElement precioMinimo = driver.findElement(By.id("preciomin"));
-				precioMinimo.sendKeys(config.getProperty("precioMin"));
-				WebElement precioMaximo = driver.findElement(By.id("preciomax"));
-				precioMaximo.sendKeys(config.getProperty("precioMax"));
-				WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
-				precioBoton.click();
-			} catch (NoSuchElementException e) {
-				log.info("No se ingresó rango de precios");
-			}
+			
 
 			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
@@ -259,7 +255,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			cerrarVentana.click();
 
 		} catch (NoSuchElementException e) {
-			log.info("No se encontro télefono o descripción");
+			log.info("No se encontro télefono o descripción",e);
 		}
 
 		return a;
@@ -273,12 +269,12 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 			driver.switchTo().frame(iframe);
 			playSound();
-//			Toolkit.getDefaultToolkit().beep();
 			JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",
 					JOptionPane.WARNING_MESSAGE);
 			
+			Utils.retryingFind(driver, By.className("lead-phone"));
 			
-			WebDriverWait wait = new WebDriverWait(driver, 5000);
+			WebDriverWait wait = new WebDriverWait(driver, 1000);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
 		}
 	}
@@ -287,18 +283,9 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		try {
 			URL url = ClassLoader.getSystemResource("censor-beep-2.wav");
 			Clip clip = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
 			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
 			clip.open(ais);
-//			clip.loop(Clip.LOOP_CONTINUOUSLY);
 			clip.loop(10);
-//			SwingUtilities.invokeLater(new Runnable() {
-//				public void run() {
-//					// A GUI element to prevent the Clip's daemon Thread
-//					// from terminating at the end of the main()
-//					JOptionPane.showMessageDialog(null, "Ingresa Captcha para continuar");
-//				}
-//			});
 		} catch (Exception e) {
 			log.info("Error al lanzar el mensaje para resolver captcha");
 		}
