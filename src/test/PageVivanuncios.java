@@ -232,7 +232,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			for (int idx = 0; idx < results; idx++) {
 
 				WebElement elementToClick = anunciosTitles.get(idx);
-						
+				
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].scrollIntoView()", elementToClick); 
 				log.info("clicking " + elementToClick.getText());
@@ -327,17 +327,17 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		Anuncio a = new Anuncio();
 		String tel = "";
 		try {
-			WebElement desc = driver.findElement(By.className("ad-description"));
+			WebElement desc = driver.findElement(By.className("ad-details-container"));
 			a.setDescripcion(desc.getText());
 		} catch (Exception e) {
-			log.debug(e.getMessage(), e);
+			log.debug("Ex al obtener detalles " + e.getMessage());
 		}
 		
 		try {
-			a.setPrecio(driver.findElement(By.xpath("//*[@id=\"viewPage\"]/div[4]/div/div[1]/div[2]/span/span")).getText());
+			a.setPrecio(driver.findElement(By.xpath("//*[@id=\"viewPage\"]/div[4]/div/div[1]/div[2]/h3/span/span")).getText());
 			log.info("Precio " + a.getPrecio());
 		} catch (Exception e) {
-			log.debug(e.getMessage(), e);
+			log.debug("Ex obteniendo precio " + e.getMessage());
 		}
 		
 		try {
@@ -345,7 +345,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			tel = driver.findElement(By.className("real-phone")).findElement(By.tagName("a")).getText();
 
 		} catch (NoSuchElementException e) {
-			log.debug(e.getMessage(), e);
+			log.debug("Ex al obtener telefono " + e.getMessage());
 		}
 
 		a.setTelefono(tel);

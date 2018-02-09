@@ -17,22 +17,6 @@ public class Ejecutable {
 
 	
 	public static void main(String[] args) throws Exception {
-		
-		try {
-			URL url = ClassLoader.getSystemResource("censor-beep-2.wav");
-			Clip clip = AudioSystem.getClip();
-			// getAudioInputStream() also accepts a File or InputStream
-			AudioInputStream ais = AudioSystem.getAudioInputStream(url);
-			clip.open(ais);
-			clip.loop(10);
-			
-		} catch (Exception e) {
-			log.info("Error al lanzar el mensaje para resolver captcha");
-		}
-		
-		
-		
-		
 		testClass testClass = new testClass();
 		testClass.testSimple();
 	}
