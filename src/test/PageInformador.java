@@ -158,6 +158,14 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 				tlaque.click();
 			}
+
+			else if (ubicacionBusqueda.equalsIgnoreCase("tonala")) {
+
+				WebElement tona = driver.findElement(By.id("quick-searchTon"));
+				log.info("Opción Seleccionada: " + config.getProperty("ubicacion"));
+
+				tona.click();
+			}
 		}
 
 		catch (Exception e) {
@@ -188,7 +196,6 @@ public class PageInformador extends AbstractAnunciosFlow {
 		try {
 
 			for (;;) {
-
 
 				driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
 				WebElement municipio = driver.findElement(By.id("items"));
@@ -262,9 +269,17 @@ public class PageInformador extends AbstractAnunciosFlow {
 
 		try {
 
-			WebElement telefono = driver.findElement(By.cssSelector("a[href*='tel']"));
-			String tel = telefono.getText();
-			a.setTelefono(tel);
+			List<WebElement> telefonos = driver.findElements(By.cssSelector("a[href*='tel:']"));
+
+			for (int x = 0; x < telefonos.size(); x++) {
+
+				WebElement telefono = telefonos.get(x);
+				String tel = telefono.getText();
+				
+				if(tel!= null) {
+					a.setTelefono(tel);
+				}
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();

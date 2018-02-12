@@ -7,11 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.io.Writer;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.WebDriver;
@@ -112,7 +110,9 @@ abstract class AbstractAnunciosFlow {
 
 			for (Anuncio a : anuncios) {
 				String desc = a.getDescripcion().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
-				writer.write(String.format(",%s %s, %s, %s, numeroSucursal", desc, a.getTelefono(), a.getPrecio().replaceAll(",", ""),transaccionConfig ));
+				String dato = a.getDatos().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
+				String titulo = a.getTitulo().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
+				writer.write(String.format(",%s %s %s %s %s, numeroSucursal", titulo, desc, dato, a.getPrecio().replaceAll(",", ""), a.getTelefono(),transaccionConfig ));
 				writer.newLine();
 
 			}

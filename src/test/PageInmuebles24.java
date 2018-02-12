@@ -170,8 +170,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		for (;;) {
 
-			
-
 			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 			int results = listaResultados.size();
@@ -183,7 +181,11 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 				Anuncio data = getDataFromLink(driver);
 
+				log.info("Título: " + idx + " " + data.getTitulo());
+
 				log.info("Descripción: " + idx + " " + data.getDescripcion());
+
+				log.info("Datos Principales: " + idx + " " + data.getDatos());
 
 				log.info("Télefono: " + idx + " " + data.getTelefono());
 
@@ -226,10 +228,35 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 		Anuncio a = new Anuncio();
 
+		WebElement tituloPropiedad = driver.findElement(By.className("card-title"));
+		WebElement titulo = tituloPropiedad.findElement(By.tagName("h1"));
+		a.setTitulo(titulo.getText());
+
+		WebElement descripccionPropiedad = driver.findElement(By.className("description-body"));
+		a.setDescripcion(descripccionPropiedad.getText());
+
 		try {
 
-			WebElement descripccionPropiedad = driver.findElement(By.className("description-body"));
-			a.setDescripcion(descripccionPropiedad.getText());
+			List<WebElement> datosPrincipales = driver.findElements(By.cssSelector(".card.aviso-datos"));
+			WebElement datoPrincipal = datosPrincipales.get(0);
+			List<WebElement> listaDatos = datoPrincipal.findElements(By.tagName("li"));
+
+			List<String> results = new ArrayList<>();
+
+			for (int x = 0; x < listaDatos.size(); x++) {
+				WebElement dato = listaDatos.get(x);
+				WebElement datosAnuncioNombre = dato.findElement(By.className("nombre"));
+				String datos = datosAnuncioNombre.getText();
+				results.add(datos);
+
+				String listString = "";
+
+				for (String s : results) {
+					listString += s + "\t";
+				}
+
+				a.setDatos(listString);
+			}
 
 			WebElement precioPropiedad = driver.findElement(By.className("precios"));
 			WebElement precioInmueble = precioPropiedad.findElement(By.tagName("strong"));
@@ -255,7 +282,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			cerrarVentana.click();
 
 		} catch (NoSuchElementException e) {
-			log.info("No se encontro télefono o descripción",e);
+			log.info("No se encontro télefono o descripción", e);
 		}
 
 		return a;
@@ -271,9 +298,9 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			playSound();
 			JOptionPane.showConfirmDialog(null, " Ingresa Captcha para continuar:", "Inmuebles24",
 					JOptionPane.WARNING_MESSAGE);
-			
+
 			Utils.retryingFind(driver, By.className("lead-phone"));
-			
+
 			WebDriverWait wait = new WebDriverWait(driver, 1000);
 			wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("lead-phone")));
 		}
@@ -289,8 +316,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 		} catch (Exception e) {
 			log.info("Error al lanzar el mensaje para resolver captcha");
 		}
-		
-		
+
 	}
 
 }

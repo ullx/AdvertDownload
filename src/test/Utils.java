@@ -10,7 +10,7 @@ public class Utils {
 	public static boolean retryingFind(WebDriver driver, By by) {
         boolean result = false;
         int attempts = 0;
-        while(attempts < 2) {
+        while(attempts < 10) {
             try {
                 driver.findElement(by);
                 result = true;

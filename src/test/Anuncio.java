@@ -1,5 +1,7 @@
 package test;
 
+import java.util.List;
+
 public class Anuncio {
  
 	String transaccion = "";
@@ -7,18 +9,21 @@ public class Anuncio {
 	String descripcion = "";
 	String telefono = "";
 	String precio = "";
+	String datos = "";
+	String titulo= "";
 	
 	public Anuncio() {
 		
 	}
 	
 	
-	public Anuncio(String transaccion, String inmueble, String descripcion, String telefono, String precio) {
+	public Anuncio(String transaccion, String inmueble, String descripcion, String telefono, String precio, String datos, String titulo) {
 		this.transaccion = transaccion;
 		this.inmueble = inmueble;
 		this.descripcion = descripcion;
 		this.telefono = telefono;
 		this.precio = precio;
+		this.datos = datos;
 	}
 	
 	public String getTransaccion() {
@@ -41,6 +46,14 @@ public class Anuncio {
 		return precio;
 	}
 	
+	public String getDatos () {
+		return datos;
+	}
+	
+	public String getTitulo () {
+		return titulo;
+	}
+	
 	public void setTransaccion(String transaccion) {
 		this.transaccion = transaccion;
 	}
@@ -58,5 +71,13 @@ public class Anuncio {
 	
 	public void setPrecio(String precio) {
 		this.precio = precio;
+	}
+	
+	public void setDatos(String datos) {
+		this.datos = datos;
+	}
+	
+	public void setTitulo(String titulo) {
+		this.titulo = titulo;
 	}
 }
