@@ -7,6 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.TimeUnit;
@@ -92,10 +95,12 @@ abstract class AbstractAnunciosFlow {
 	abstract void hacerConsulta();
 	
 	public void exportToCSV(List<Anuncio> anuncios) throws UnsupportedEncodingException, FileNotFoundException {
+		Calendar cal = Calendar.getInstance();
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy-HH:mm");
+		String date = df.format(cal.getTime());
 		log.info("Se escribiran " + anuncios.size());
 		String pagina = config.getProperty("pagina");
-		String fileName =pagina + " " + config.getProperty("inmueble") + " " + config.getProperty("transaccion")  + " " + config.getProperty("ubicacion") + ".csv";
-		
+		String fileName = String.format("%s %s %s %s %s.csv", pagina, config.getProperty("inmueble"), config.getProperty("transaccion"), config.getProperty("ubicacion"), date);
 		
 		File dir = new File(outputFileDir);
 		if(dir.exists() == false) {
