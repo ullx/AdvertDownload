@@ -51,23 +51,23 @@ abstract class AbstractAnunciosFlow {
 		String precioMinConfig = config.getProperty("precioMin");
 		String precioMaxConfig = config.getProperty("precioMax");
 		
-		log.info("Parametros de b˙squeda: ");
-		log.info("TransacciÛn: ---" + transaccionConfig);
+		log.info("Parametros de b√∫squeda: ");
+		log.info("Transacci√≥n: ---" + transaccionConfig);
 		log.info("Inmuebles  : ---" + inmuebleConfig);
-		log.info("UbicaciÛn  : ---" + ubicacionConfig);
+		log.info("Ubicaci√≥n  : ---" + ubicacionConfig);
 		log.info("Precio Min : ---" + precioMinConfig);
 		log.info("Precio Max : ---" + precioMaxConfig);
 		
 		
 		this.inmuebleTipo = BusquedaTipo.getValueOf(inmuebleConfig);
 		if(inmuebleTipo == null) {
-			System.err.println("No se configurÛ un tipo de inmueble v·lido " + inmuebleConfig);
+			System.err.println("No se configur√≥ un tipo de inmueble v√°lido " + inmuebleConfig);
 			throw new RuntimeException();
 		}
 		
 		//NO CAMBIAR ESTO SE TIENEN QUE EVALUAR LAS DOS CONDICIONES
 		if(!transaccionConfig.equalsIgnoreCase("renta") & !transaccionConfig.equalsIgnoreCase("venta")) {
-			System.err.println("No se configurÛ un tipo de transaccion v·lido " + transaccionConfig);
+			System.err.println("No se configur√≥ un tipo de transaccion v√°lido " + transaccionConfig);
 			throw new RuntimeException();
 		}
 		
@@ -96,7 +96,7 @@ abstract class AbstractAnunciosFlow {
 	
 	public void exportToCSV(List<Anuncio> anuncios) throws UnsupportedEncodingException, FileNotFoundException {
 		Calendar cal = Calendar.getInstance();
-		DateFormat df = new SimpleDateFormat("dd-MM-yyyy-HH:mm");
+		DateFormat df = new SimpleDateFormat("dd-MM-yyyy-HH-mm-ss");
 		String date = df.format(cal.getTime());
 		log.info("Se escribiran " + anuncios.size());
 		String pagina = config.getProperty("pagina");
