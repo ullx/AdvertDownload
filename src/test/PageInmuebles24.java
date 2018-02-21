@@ -48,13 +48,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : transaccionesTipo) {
 				if (transaccionTipo.equalsIgnoreCase("venta") && opciones.getText().equalsIgnoreCase("Comprar")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				if (transaccionTipo.equalsIgnoreCase("renta") && opciones.getText().equalsIgnoreCase("Rentar")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
@@ -77,13 +77,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (WebElement opciones : seleccionarPropiedad) {
 				if (propiedadTipo.toLowerCase().contains("bodega") && opciones.getText().equalsIgnoreCase("Bodegas")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("casa") && opciones.getText().equalsIgnoreCase("Casa")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -91,14 +91,14 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				else if (propiedadTipo.toLowerCase().contains("terreno")
 						&& opciones.getText().equalsIgnoreCase("Terreno / Lote")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 				}
 
 				else if (propiedadTipo.toLowerCase().contains("oficina")
 						&& opciones.getText().equalsIgnoreCase("Oficina")) {
 					a.setTransaccion(opciones.getText());
-					log.info("Opción Seleccionada: " + a.getTransaccion());
+					log.info("OpciÃ³n Seleccionada: " + a.getTransaccion());
 					opciones.click();
 
 				}
@@ -165,7 +165,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			WebElement precioBoton = driver.findElement(By.id("botonPrecio"));
 			precioBoton.click();
 		} catch (NoSuchElementException e) {
-			log.info("No se ingresó rango de precios");
+			log.info("No se ingresÃ³ rango de precios");
 		}
 
 		for (;;) {
@@ -173,7 +173,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 			int results = listaResultados.size();
-			log.info("Número de resultados: " + results);
+			log.info("NÃºmero de resultados: " + results);
 
 			for (int idx = 0; idx < results; idx++) {
 
@@ -181,13 +181,13 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 
 				Anuncio data = getDataFromLink(driver);
 
-				log.info("Título: " + idx + " " + data.getTitulo());
+				log.info("TÃ­tulo: " + idx + " " + data.getTitulo());
 
-				log.info("Descripción: " + idx + " " + data.getDescripcion());
+				log.info("DescripciÃ³n: " + idx + " " + data.getDescripcion());
 
 				log.info("Datos Principales: " + idx + " " + data.getDatos());
 
-				log.info("Télefono: " + idx + " " + data.getTelefono());
+				log.info("TÃ©lefono: " + idx + " " + data.getTelefono());
 
 				log.info("Precio: " + idx + " " + data.getPrecio());
 
@@ -198,7 +198,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 					WebElement regresar = driver.findElement(By.className("ticon-arrow-left"));
 					regresar.click();
 				} catch (NoSuchElementException e) {
-					log.info("No se encontró link para regresar");
+					log.info("No se encontrÃ³ link para regresar");
 					break;
 				}
 
@@ -214,7 +214,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 				}
 
 			} catch (WebDriverException e) {
-				log.info("Se llegó al final de las paginas");
+				log.info("Se llegÃ³ al final de las paginas");
 				break;
 			}
 
@@ -242,22 +242,16 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			List<WebElement> listaDatos = datoPrincipal.findElements(By.tagName("li"));
 
 			List<String> results = new ArrayList<>();
-
+			StringBuilder datosPrincipales = new StringBuilder();
 			for (int x = 0; x < listaDatos.size(); x++) {
 				WebElement dato = listaDatos.get(x);
 				WebElement datosAnuncioNombre = dato.findElement(By.className("nombre"));
 				String datos = datosAnuncioNombre.getText();
-				results.add(datos);
-
-				String listString = "";
-
-				for (String s : results) {
-					listString += s + "\t";
-				}
-
-				a.setDatos(listString);
+				datosPrincipales.append(datos.replaceAll(","," "));
 			}
-
+			
+			//a.setDatos(sb.toString());
+			a.setDescription(a,getDescription() + " " + datosPrincipales.toString());
 			WebElement precioPropiedad = driver.findElement(By.className("precios"));
 			WebElement precioInmueble = precioPropiedad.findElement(By.tagName("strong"));
 			a.setPrecio(precioInmueble.getText());
@@ -282,7 +276,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			cerrarVentana.click();
 
 		} catch (NoSuchElementException e) {
-			log.info("No se encontro télefono o descripción", e);
+			log.info("No se encontro tÃ©lefono o descripciÃ³n", e);
 		}
 
 		return a;
