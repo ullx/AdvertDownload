@@ -242,16 +242,16 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			List<WebElement> listaDatos = datoPrincipal.findElements(By.tagName("li"));
 
 			List<String> results = new ArrayList<>();
-			StringBuilder datosPrincipales = new StringBuilder();
+			StringBuilder datosPrincipales2 = new StringBuilder();
 			for (int x = 0; x < listaDatos.size(); x++) {
 				WebElement dato = listaDatos.get(x);
 				WebElement datosAnuncioNombre = dato.findElement(By.className("nombre"));
 				String datos = datosAnuncioNombre.getText();
-				datosPrincipales.append(datos.replaceAll(","," "));
+				datosPrincipales2.append(datos.replaceAll(","," "));
 			}
 			
 			//a.setDatos(sb.toString());
-			a.setDescription(a,getDescription() + " " + datosPrincipales.toString());
+			a.setDescripcion(a.getDescripcion() + " " + datosPrincipales2.toString());
 			WebElement precioPropiedad = driver.findElement(By.className("precios"));
 			WebElement precioInmueble = precioPropiedad.findElement(By.tagName("strong"));
 			a.setPrecio(precioInmueble.getText());
