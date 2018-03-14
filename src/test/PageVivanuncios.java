@@ -188,21 +188,34 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			estado = "méxico";
 		}
 		driver.findElement(By.className("location-link")).click();
-		driver.findElement(By.id("modal-location")).sendKeys(estado);
+		driver.findElement(By.id("locationPicker-input")).sendKeys(estado);
 
-		WebElement estadosContainer = driver.findElement(By.className("pac-container"));
-		List<WebElement> estados = estadosContainer.findElements(By.className("pac-item"));
+		WebElement estadosContainer = driver.findElement(By.id("locationPicker-type-ahead"));
+		
+		List<WebElement> estados = estadosContainer.findElements(By.className("locationPicker-item"));
+		
 		for (WebElement estadoSelect : estados) {
-			if (estadoSelect.getText().toLowerCase().contains(estado)) {
+			String selection = estadoSelect.getText().toLowerCase();
+			selection = selection.replaceAll(",", " ");
+			if (selection.contains(estado)) {
+				System.out.println("estadoSelect.getText() " + estadoSelect.getText());
 				estadoSelect.click();
 				break;
 			}
 		}
+		uglyWait(2000);
 
 		// Click en boton aplicar ubicacion
-		WebDriverWait wait = new WebDriverWait(driver, 2000);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("change-loc")));
-		driver.findElement(By.className("change-loc")).click();
+		WebElement confirmBtn = driver.findElement(By.xpath("//*[@id=\"locationPicker\"]/div[2]/div/div[4]/div/div/div/a"));
+//		WebDriverWait wait = new WebDriverWait(driver, 2000);
+//		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"locationPicker\"]/div[2]/div/div[4]/div/div/div/a")));
+//		Actions action = new Actions(driver);
+//		action.moveToElement(confirmBtn).click().perform();
+		
+		
+		JavascriptExecutor executor = (JavascriptExecutor)driver;
+		executor.executeScript("arguments[0].click();", confirmBtn);
+		
 	}
 
 	@Override
