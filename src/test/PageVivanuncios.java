@@ -29,9 +29,11 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		return baseURL;
 	}
 
+	
 	@Override
 	void hacerConsulta() {
 		this.estado = config.getProperty("ubicacion");
+		seleccionarEstado(estado);
 		
 		driver.findElement(By.id("js-browse-item-text")).click();
 		String transaccion = config.getProperty("transaccion");
@@ -64,7 +66,6 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		}
 		
 		agregarFiltros(inmuebleTipo);
-		seleccionarEstado(estado);
 		
 		//Agregar filtros
 //		driver.findElement(By.xpath("//*[@id=\"searchChips\"]/div[2]/div/span")).click();
@@ -75,7 +76,58 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 	}
 	
 	private void agregarFiltros(BusquedaTipo tipoInmueble) {
+		WebElement agregarFiltrosBtn = driver.findElement(By.xpath("//*[@id=\"searchChips\"]/div[2]/div/span"));
 		
+		if(agregarFiltrosBtn != null && agregarFiltrosBtn.isDisplayed()) {
+			agregarFiltrosOld(tipoInmueble);
+		}else {
+			String transaccion = config.getProperty("transaccion");
+			WebElement tabsContainer = driver.findElement(By.id("tab-container"));
+			
+			
+			if(tipoInmueble == BusquedaTipo.BODEGA) {
+				// por el momento este [#tab1] seria el tab de seleccion de venta o renta, pero podria
+				// cambiar en un futuro supongo
+				 tabsContainer.findElement(By.cssSelector("a[href*='#tab1']")).click();
+				 
+				if(transaccion.equals("venta")) {
+					driver.findElement(By.xpath("//*[@id=\"tab1\"]/div/div/div[1]/div/label/span[1]")).click();
+				}else {
+					driver.findElement(By.xpath("//*[@id=\"tab1\"]/div/div/div[2]/div/label/span[1]")).click();
+				}
+			} else if(tipoInmueble == BusquedaTipo.OFICINA) {
+				setFiltroOficinaOld();
+			} 
+		}
+		log.debug("tipoInmueble " + tipoInmueble);
+	}
+	
+	private void setFiltroOficinaOld() {
+		By dropDownList = By.id("L3Category");
+		retryingFindClick(dropDownList);
+		WebElement select = driver.findElement(By.id("L3Category"));
+		select.click();
+		List<WebElement> options = select.findElements(By.tagName("option"));
+		for(WebElement opt : options) {
+			String optText = opt.getText().toLowerCase();
+			if(optText.contains("oficina") || optText.contains("comerciales") ) { //propiedades comerciales
+				opt.click();
+				break;
+			}
+		}
+		uglyWait(2000);
+		
+		WebDriverWait wait4 = new WebDriverWait(driver, 2000);
+		wait4.until(ExpectedConditions.visibilityOfElementLocated(By.className("filterContainer")));
+	}
+	
+	private void setFiltroCasaOld() {
+		
+	}
+	
+	
+	private void agregarFiltrosOld(BusquedaTipo tipoInmueble) {
+		System.out.println("AgregarFiltros old");
 		String transaccion = config.getProperty("transaccion");
 		driver.findElement(By.xpath("//*[@id=\"searchChips\"]/div[2]/div/span")).click();
 		WebDriverWait wait2 = new WebDriverWait(driver, 2000);
@@ -85,7 +137,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		if(tipoInmueble == BusquedaTipo.BODEGA) {
 			if(transaccion.equalsIgnoreCase("venta")) {
 				log.debug("Seleccionando venta");
-				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/input");  //  "//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
+				By by = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div"); // By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/input");  //  "//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
 				log.debug("slected {}",retryingFindClick(by));
 //				driver.findElement(by).click();
 			}else {
@@ -95,25 +147,12 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 //				driver.findElement(by).click();
 			}
 		}else if(tipoInmueble == BusquedaTipo.OFICINA) {
-			By dropDownList = By.id("L3Category");
-			retryingFindClick(dropDownList);
-			WebElement select = driver.findElement(By.id("L3Category"));
-			select.click();
-			List<WebElement> options = select.findElements(By.tagName("option"));
-			for(WebElement opt : options) {
-				if(opt.getText().toLowerCase().contains("oficina")) {
-					opt.click();
-					break;
-				}
-			}
-			try {
-				Thread.sleep(2000);
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
-			
-			WebDriverWait wait4 = new WebDriverWait(driver, 2000);
-			wait4.until(ExpectedConditions.visibilityOfElementLocated(By.className("filterContainer")));
+			setFiltroOficinaOld();
+		} else if(tipoInmueble == BusquedaTipo.CASA) {
+			By casaSelector = By.xpath("//*[@id=\"filter-attribute\"]/div[3]/div[2]/div[1]/div/label/div/div");
+			WebDriverWait wait = new WebDriverWait(driver, 2000);
+			wait.until(ExpectedConditions.visibilityOfElementLocated(casaSelector));
+			retryingFindClick(casaSelector);
 		}
 		
 		if (tipoInmueble != BusquedaTipo.TERRENO && tipoInmueble != BusquedaTipo.CASA && tipoInmueble != BusquedaTipo.BODEGA) {
@@ -186,36 +225,28 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		// si no se selecciona localidad toma para todo mexico
 		if(estado.isEmpty() || estado.equalsIgnoreCase("nacional") || estado.equalsIgnoreCase("mexico")) {
 			estado = "mÈxico";
+			driver.findElement(By.id("hero-form")).submit();
+			return;
 		}
-		driver.findElement(By.className("location-link")).click();
-		driver.findElement(By.id("locationPicker-input")).sendKeys(estado);
+		
+		estado = estado.toLowerCase();
+		
+		//Clickeando "ver mas" link para tener todos los estados desplegados
+		driver.findElement(By.className("view-more")).click();
+//		String vocalesAcento = "[·ÈÌÛ˙¡…Õ”⁄]";
+//		String cleanEstado = estado.replace(vocalesAcento, "");
+		
+		List<WebElement> estadosLinks = driver.findElement(By.id("quickLinks")).findElements(By.className("quick-link-item"));
 
-		WebElement estadosContainer = driver.findElement(By.id("locationPicker-type-ahead"));
-		
-		List<WebElement> estados = estadosContainer.findElements(By.className("locationPicker-item"));
-		
-		for (WebElement estadoSelect : estados) {
-			String selection = estadoSelect.getText().toLowerCase();
-			selection = selection.replaceAll(",", " ");
-			if (selection.contains(estado)) {
-				System.out.println("estadoSelect.getText() " + estadoSelect.getText());
-				estadoSelect.click();
+		for (WebElement estadoLink : estadosLinks) {
+			String currentEstadoLink = estadoLink.getText().toLowerCase();
+			System.out.println("estadosLink " + currentEstadoLink + " contains " + estado + "?");
+			currentEstadoLink = currentEstadoLink.replaceAll(",", " ");
+			if (currentEstadoLink.contains(estado)) {
+				estadoLink.findElement(By.tagName("a")).click();
 				break;
 			}
 		}
-		uglyWait(2000);
-
-		// Click en boton aplicar ubicacion
-		WebElement confirmBtn = driver.findElement(By.xpath("//*[@id=\"locationPicker\"]/div[2]/div/div[4]/div/div/div/a"));
-//		WebDriverWait wait = new WebDriverWait(driver, 2000);
-//		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[@id=\"locationPicker\"]/div[2]/div/div[4]/div/div/div/a")));
-//		Actions action = new Actions(driver);
-//		action.moveToElement(confirmBtn).click().perform();
-		
-		
-		JavascriptExecutor executor = (JavascriptExecutor)driver;
-		executor.executeScript("arguments[0].click();", confirmBtn);
-		
 	}
 
 	@Override
