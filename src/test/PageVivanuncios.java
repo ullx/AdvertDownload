@@ -76,7 +76,14 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 	}
 	
 	private void agregarFiltros(BusquedaTipo tipoInmueble) {
-		WebElement agregarFiltrosBtn = driver.findElement(By.xpath("//*[@id=\"searchChips\"]/div[2]/div/span"));
+		
+		WebElement agregarFiltrosBtn = null;
+		
+		try {
+			 agregarFiltrosBtn = driver.findElement(By.xpath("//*[@id=\"searchChips\"]/div[2]/div/span"));
+		} catch (NoSuchElementException e) {
+		}
+		 
 		
 		if(agregarFiltrosBtn != null && agregarFiltrosBtn.isDisplayed()) {
 			agregarFiltrosOld(tipoInmueble);
@@ -280,7 +287,10 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				JavascriptExecutor jse = (JavascriptExecutor) driver;
 				jse.executeScript("arguments[0].scrollIntoView()", elementToClick); 
 				log.info("clicking " + elementToClick.getText());
-				elementToClick.click();
+				
+				String linkToFollow = elementToClick.findElement(By.tagName("meta")).getAttribute("content");
+				driver.get(linkToFollow);
+//				elementToClick.click();
 				
 				Anuncio data = getDataFromLink(driver);
 
@@ -403,5 +413,6 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			// TODO: handle exception
 		}
 	}
+	
 	
 }
