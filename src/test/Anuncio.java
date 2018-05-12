@@ -24,6 +24,7 @@ public class Anuncio {
 		this.telefono = telefono;
 		this.precio = precio;
 		this.datos = datos;
+		this.titulo = titulo;
 	}
 	
 	public String getTransaccion() {

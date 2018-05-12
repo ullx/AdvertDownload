@@ -29,7 +29,6 @@ abstract class AbstractAnunciosFlow {
 	String transaccionConfig = null;
 	
 	public WebDriver setupDriver() {
-//		File file = new File("C:\\Users\\Usuario\\Documents\\Tools\\Drivers\\chromedriver_win32\\chromedriver.exe");
 		File file = new File(chromeDriverPath);
 		log.info("searching for driver " + file.getAbsolutePath());
 		System.setProperty("webdriver.chrome.driver", file.getAbsolutePath());
@@ -114,9 +113,11 @@ abstract class AbstractAnunciosFlow {
 		try {
 
 			for (Anuncio a : anuncios) {
-				String desc = a.getDescripcion().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
-				String titulo = a.getTitulo().replaceAll("\n", "").replaceAll("\r", "").replaceAll(","," ");
-				writer.write(String.format(",%s %s %s %s %s, numeroSucursal", titulo, desc, a.getPrecio().replaceAll(",", ""), a.getTelefono(),transaccionConfig ));
+				String desc = Utils.removeLineBreaks(a.getDescripcion());
+				String titulo = Utils.removeLineBreaks(a.getTitulo());
+				String precio = Utils.removeLineBreaks(a.getPrecio());
+				String tel = Utils.removeLineBreaks(a.getTelefono());
+				writer.write(String.format(",%s %s %s %s %s, numeroSucursal", titulo, desc, precio, tel,transaccionConfig ));
 				writer.newLine();
 
 			}
