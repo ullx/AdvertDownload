@@ -124,9 +124,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				System.out.println("Scanning2 " + catl2.getText());
 			}
 			if (catl2.isDisplayed() && catl2.getText().toLowerCase().contains(stringToLookFor)) {
-				System.out.println("stringToLookFor");
 				catl2.findElement(By.className("cat-link-item")).click();
-
 				break;
 			}
 		}
@@ -386,7 +384,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				log.info("Num Pagina " + countPagina + " idx " + idx + " Logged anuncios " + anuncios.size());
 				
 				
-				log.info(" clicking " + Utils.removeLineBreaks(elementToClick.getText()));
+				log.info(" clicking " + Utils.cleanToWriteCSV(elementToClick.getText()));
 				
 				String linkToFollow = elementToClick.findElement(By.tagName("meta")).getAttribute("content");
 				driver.get(linkToFollow);
@@ -394,7 +392,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 				
 				Anuncio data = getDataFromLink(driver);
 
-				log.info("Descripción: " + idx + " " + Utils.removeLineBreaks(data.getDescripcion()));
+				log.info("Descripción: " + idx + " " + Utils.cleanToWriteCSV(data.getDescripcion()));
 				anuncios.add(data);
 
 				try {
@@ -525,9 +523,9 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 			tel = driver.findElement(By.className("real-phone")).findElement(By.tagName("a")).getText();
 
 		} catch (NoSuchElementException e) {
-			driver.findElement(By.className("display-phone")).click();
-			uglyWait(5000);
 			try {
+				driver.findElement(By.className("display-phone")).click();
+				uglyWait(5000);
 				tel = driver.findElement(By.className("real-phone")).getText();	
 			} catch (NoSuchElementException e2) {
 				log.info("no se pudo obtener telefono");

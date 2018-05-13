@@ -66,8 +66,10 @@ public class Utils {
 		return result;
 	}
 
-	public static String removeLineBreaks(String strToClean) {
-		return strToClean.replaceAll("\r", " ").replaceAll("\n", " ");
+	public static String cleanToWriteCSV(String strToClean) {
+		String tmp = strToClean.replaceAll("\r", " ").replaceAll("\n", " ");
+		tmp = tmp.replaceAll(",", "");
+		return tmp;
 	}
 	
 }

@@ -113,10 +113,10 @@ abstract class AbstractAnunciosFlow {
 		try {
 
 			for (Anuncio a : anuncios) {
-				String desc = Utils.removeLineBreaks(a.getDescripcion());
-				String titulo = Utils.removeLineBreaks(a.getTitulo());
-				String precio = Utils.removeLineBreaks(a.getPrecio());
-				String tel = Utils.removeLineBreaks(a.getTelefono());
+				String desc = Utils.cleanToWriteCSV(a.getDescripcion());
+				String titulo = Utils.cleanToWriteCSV(a.getTitulo());
+				String precio = Utils.cleanToWriteCSV(a.getPrecio());
+				String tel = Utils.cleanToWriteCSV(a.getTelefono());
 				writer.write(String.format(",%s %s %s %s %s, numeroSucursal", titulo, desc, precio, tel,transaccionConfig ));
 				writer.newLine();
 
