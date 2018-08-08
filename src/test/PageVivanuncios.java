@@ -152,11 +152,11 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		if(agregarFiltrosBtn != null && agregarFiltrosBtn.isDisplayed()) {
 			agregarFiltrosOld(tipoInmueble);
 		}else {
-			setFiltroPrecio();
+			
 			if(inmuebleTipo != BusquedaTipo.CASA) {
 				setFiltroTransaccion();
 			}
-			
+			setFiltroPrecio();
 		}
 		log.debug("tipoInmueble " + tipoInmueble);
 	}
@@ -370,7 +370,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 		int countPagina = 1;
 		
 		do {
-			List<WebElement> anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-panel"));
+			List<WebElement> anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-item"));
 			int results = anunciosTitles.size();
 			
 			log.info("Pagina: " + countPagina + " Número de resultados" + results);
@@ -404,7 +404,7 @@ public class PageVivanuncios extends AbstractAnunciosFlow {
 					break;
 				}
 
-				anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-panel"));
+				anunciosTitles = driver.findElement(By.id("tileRedesign")).findElements(By.className("tile-item"));
 			}
 			countPagina++;
 		}while (morePagesExists());

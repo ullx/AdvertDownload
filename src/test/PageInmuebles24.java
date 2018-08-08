@@ -178,9 +178,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			for (int idx = 0; idx < results; idx++) {
 
 				listaResultados.get(idx).click();
-				
-				ArrayList<String> tabs2 = new ArrayList<String> (driver.getWindowHandles());
-			    driver.switchTo().window(tabs2.get(1));
 
 				Anuncio data = getDataFromLink(driver);
 
@@ -204,13 +201,10 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 					log.info("No se encontró link para regresar");
 					break;
 				}
-				
-				driver.close();
-			    driver.switchTo().window(tabs2.get(0));
 
 				seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 				listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
-				
+
 			}
 
 			try {
@@ -233,7 +227,6 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	private Anuncio getDataFromLink(WebDriver driver) {
 
 		Anuncio a = new Anuncio();
-		
 
 		WebElement tituloPropiedad = driver.findElement(By.className("card-title"));
 		WebElement titulo = tituloPropiedad.findElement(By.tagName("h1"));
