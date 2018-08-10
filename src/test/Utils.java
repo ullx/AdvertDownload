@@ -1,5 +1,7 @@
 package test;
 
+import java.net.URL;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -72,4 +74,17 @@ public class Utils {
 		return tmp;
 	}
 	
+	public static void openLinkInSamePage(WebDriver driver, String linkToOpen) {
+		System.out.println("driver.getCurrentUrl() " + driver.getCurrentUrl());
+		String currentUrl = driver.getCurrentUrl();
+		String host = driver.getCurrentUrl().substring(0, currentUrl.indexOf("/", 8));
+		
+		if(! linkToOpen.startsWith("/")) {
+			linkToOpen = "/".concat(linkToOpen);
+		}
+		
+		System.out.println("new host " + host);
+		System.out.println("new url " + host.concat(linkToOpen));
+		driver.get(host.concat(linkToOpen));
+	}
 }

@@ -173,21 +173,28 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			WebElement seleccionarAnuncios = driver.findElement(By.id("avisos-content"));
 			List<WebElement> listaResultados = seleccionarAnuncios.findElements(By.className("aviso-desktop"));
 			int results = listaResultados.size();
-			log.info("NÃºmero de resultados: " + results);
+			log.info("Número de resultados: " + results);
 
 			for (int idx = 0; idx < results; idx++) {
 
-				listaResultados.get(idx).click();
+				
+				WebElement liAnuncio = listaResultados.get(idx); //.click();
+				System.out.println("liAnuncio.getAttribute(\"data-href\") " + liAnuncio.getAttribute("data-href"));
+				Utils.openLinkInSamePage(driver, liAnuncio.getAttribute("data-href"));
+				/*
+				 * String linkToFollow = elementToClick.findElement(By.tagName("meta")).getAttribute("content");
+				 * data-href="/propiedades/venta-de-casa-en-ayamonte-53085543.html"
+				 * */
 
 				Anuncio data = getDataFromLink(driver);
 
-				log.info("TÃ­tulo: " + idx + " " + data.getTitulo());
+				log.info("Título: " + idx + " " + data.getTitulo());
 
 				log.info("Descripción: " + idx + " " + data.getDescripcion());
 
 				log.info("Datos Principales: " + idx + " " + data.getDatos());
 
-				log.info("TÃ©lefono: " + idx + " " + data.getTelefono());
+				log.info("Teléfono: " + idx + " " + data.getTelefono());
 
 				log.info("Precio: " + idx + " " + data.getPrecio());
 
@@ -227,10 +234,11 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 	private Anuncio getDataFromLink(WebDriver driver) {
 
 		Anuncio a = new Anuncio();
-
-		WebElement tituloPropiedad = driver.findElement(By.className("card-title"));
-		WebElement titulo = tituloPropiedad.findElement(By.tagName("h1"));
-		a.setTitulo(titulo.getText());
+		By byTitle = By.className("card-title");
+		Utils.retryingFindClick(driver,byTitle);
+		WebElement tituloPropiedad = driver.findElement(byTitle);
+//		WebElement titulo = tituloPropiedad.findElement(By.tagName("h1"));
+		a.setTitulo(tituloPropiedad.getText());
 
 		WebElement descripccionPropiedad = driver.findElement(By.className("description-body"));
 		a.setDescripcion(descripccionPropiedad.getText());
@@ -276,7 +284,7 @@ public class PageInmuebles24 extends AbstractAnunciosFlow {
 			cerrarVentana.click();
 
 		} catch (NoSuchElementException e) {
-			log.info("No se encontro tÃ©lefono o descripción", e);
+			log.info("No se encontro teléfono o descripción", e);
 		}
 
 		return a;
